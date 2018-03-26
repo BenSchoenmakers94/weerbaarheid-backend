@@ -1,7 +1,13 @@
 var mongoose = require('mongoose');
 
+//Credentials
+var userName = 'theShoemaker';
+var passWord = 'Ubuntu1'
+// /Credentials
+
 //Database Connection
-mongoose.connect('mongodb://localhost:27017/weerbaarheid', function(err) {
+mongoose.connect('mongodb://' + userName + ':' + passWord + '@ds038547.mlab.com:38547/weerbaarheid', 
+    { keepAlive: 120 } , function(err) {
     if (err) {
         console.log(err);
     } else {
