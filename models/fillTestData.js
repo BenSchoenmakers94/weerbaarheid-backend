@@ -8,14 +8,23 @@ function fillTestUsers(){
         {
             firstName: 'Jan',
             lastName: 'Jansen',
+            birthDate: '1986-03-26T00:00:00.407Z',
+            postalCode: '1111 AB',
+            houseNumber: 1
         },
         {
             firstName: 'Piet',
             lastName: 'Pietersen',
+            birthDate: '1993-08-21T00:00:00.407Z',
+            postalCode: '2222CD',
+            houseNumber: 2
         },
         {
             firstName: 'Karel',
             lastName: 'Karelsen',
+            birthDate: '2001-01-01T00:00:00.407Z',
+            postalCode: '3333 DE',
+            houseNumber: 3
         }
 	];
 
