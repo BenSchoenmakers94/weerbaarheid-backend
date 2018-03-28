@@ -1,6 +1,7 @@
 var express = require('express');
 var bcrypt = require('bcryptjs');
 var bodyParser= require('body-parser');
+var JSONAPIDeserializer = require('jsonapi-serializer').Deserializer;
 
 var User = require('../models/user');
 var UserSerializer = require('../serializers/userSerializer');
@@ -22,25 +23,33 @@ router.get('/', VerifyToken, function(req, res, next) {
 });
 
 router.post('/', function(req, res) {
-    var hashedPassword = bcrypt.hashSync(req.body.password, 8);
 
-    User.create({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        birthDate: req.body.birthDate,
-        postalCode: req.body.postalCode,
-        houseNumber: req.body.houseNumber,
-        email: req.body.email,
-        password: hashedPassword
-    },
-    function(err, user) {
+    new JSONAPIDeserializer({ keyForAttribute: 'camelCase' }).deserialize(req.body, function(err, json) {
         if (err) {
             return res.status(500).send(
-                "There was a problem with registering the user."
+                "There was a problem with the payload."
             );
         }
-            var jsonApi = UserSerializer.serialize(user);
-            res.status(201).send(jsonApi);
+        console.log(json);
+        var hashedPassword = bcrypt.hashSync(json.password, 8);
+        User.create({
+            firstName: json.firstName,
+            lastName: json.lastName,
+            birthDate: json.birthDate,
+            postalCode: json.postalCode,
+            houseNumber: json.houseNumber,
+            email: json.email,
+            password: hashedPassword
+        },
+        function(err, user) {
+            if (err) {
+                return res.status(500).send(
+                    "There was a problem with registering the user."
+                );
+            }
+                var jsonApi = UserSerializer.serialize(user);
+                res.status(201).send(jsonApi);
+        });
     });
 });
 
