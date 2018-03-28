@@ -18,10 +18,13 @@ require('./models/user');
 
 //Authentication
 var authController = require('./authentication/authcontroller');
-app.use('/api/auth', authController);
+app.use('/', authController);
 // /Authentication
 
 var userRoute = require('./routes/users');
 app.use('/users', userRoute);
  
+var userRoute = require('./routes/groups');
+app.use('/groups', userRoute);
+
 module.exports = app;
