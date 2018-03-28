@@ -19,4 +19,7 @@ var authController = require('./authentication/authcontroller');
 app.use('/api/auth', authController);
 // /Authentication
 
+var userRoute = require('./routes/users');
+app.use('/users', userRoute);
+ 
 module.exports = app;
