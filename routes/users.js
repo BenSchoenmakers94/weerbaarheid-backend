@@ -9,7 +9,7 @@ var VerifyToken = require('../helpers/verifyToken');
 
 var router = express.Router();
 router.use(bodyParser.urlencoded({ extended: false }));
-router.use(bodyParser.json());
+router.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
 router.get('/', VerifyToken, function(req, res, next) {
     User.find({}, function(err, users) {
