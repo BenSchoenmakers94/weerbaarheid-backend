@@ -8,5 +8,8 @@ module.exports = new JSONAPISerializer('users', {
         'postalCode',
         'houseNumber',
         'email'
+    ],
+    belongsTo: [
+        'group'
     ]
 });

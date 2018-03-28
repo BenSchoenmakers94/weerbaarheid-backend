@@ -22,6 +22,17 @@ router.get('/', VerifyToken, function(req, res, next) {
     })
 });
 
+router.get('/:_id', VerifyToken, function(req, res, next) {
+    User.findById(req.params._id, function(err, user) {
+        if (err) {
+            res.status(500).send("There was a problem finding the list of users");
+        }
+
+        var jsonApi = UserSerializer.serialize(user);
+        res.status(200).send(jsonApi);
+    })
+});
+
 router.post('/', function(req, res) {
 
     new JSONAPIDeserializer({ keyForAttribute: 'camelCase' }).deserialize(req.body, function(err, json) {
@@ -30,9 +41,10 @@ router.post('/', function(req, res) {
                 "There was a problem with the payload."
             );
         }
-        console.log(json);
+
         var hashedPassword = bcrypt.hashSync(json.password, 8);
         User.create({
+            _id: json.id,
             firstName: json.firstName,
             lastName: json.lastName,
             birthDate: json.birthDate,
@@ -43,8 +55,8 @@ router.post('/', function(req, res) {
         },
         function(err, user) {
             if (err) {
-                return res.status(500).send(
-                    "There was a problem with registering the user."
+                return res.status(422).send(
+                    err.message
                 );
             }
                 var jsonApi = UserSerializer.serialize(user);

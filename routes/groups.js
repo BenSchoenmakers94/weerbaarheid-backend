@@ -22,7 +22,6 @@ router.get('/', VerifyToken, function(req, res, next) {
 });
 
 router.post('/', VerifyToken, function(req, res) {
-
     new JSONAPIDeserializer({ keyForAttribute: 'camelCase' }).deserialize(req.body, function(err, json) {
         if (err) {
             return res.status(500).send(
@@ -35,12 +34,13 @@ router.post('/', VerifyToken, function(req, res) {
         },
         function(err, group) {
             if (err) {
-                return res.status(500).send(
-                    "There was a problem with creating the group."
+                return res.status(422).send(
+                    err.message
                 );
             }
-                var jsonApi = GroupSerializer.serialize(group);
-                res.status(201).send(jsonApi);
+
+            var jsonApi = GroupSerializer.serialize(group);
+            res.status(201).send(jsonApi);
         });
     });
 });
