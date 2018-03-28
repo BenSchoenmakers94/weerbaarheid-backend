@@ -7,7 +7,9 @@ var userSchema = new mongoose.Schema({
     lastName: { type: String, required: true },
     birthDate: { type: Date, required: true },
     postalCode: { type: String, required: true },
-    houseNumber: { type: Number, required: true }
+    houseNumber: { type: Number, required: true },
+    email: { type: String, required: true },
+    password: { type: String, required: true }
 });
 
 userSchema.path('birthDate').validate(function(value) {
@@ -23,4 +25,6 @@ userSchema.path('houseNumber').validate(function(value) {
     return value > 0;
 });
 
-module.exports = mongoose.model('User', userSchema);
+mongoose.model('User', userSchema);
+
+module.exports = mongoose.model('User');
