@@ -9,7 +9,8 @@ var userSchema = new mongoose.Schema({
     postalCode: { type: String, required: true },
     houseNumber: { type: Number, required: true },
     email: { type: String, required: true },
-    password: { type: String, required: true }
+    password: { type: String, required: true },
+    group: { type: mongoose.Schema.Types.ObjectId, ref: 'Group', required: true }
 });
 
 userSchema.path('birthDate').validate(function(value) {
