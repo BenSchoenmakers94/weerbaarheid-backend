@@ -23,7 +23,8 @@ router.get('/', VerifyToken, function(req, res, next) {
 });
 
 router.get('/:_id', VerifyToken, function(req, res, next) {
-    User.findById(req.params._id, function(err, user) {
+    User.findById(new RegExp('^'+ req.params._id + '$', "i"), 
+    function(err, user) {
         if (err) {
             res.status(500).send("There was a problem finding the list of users");
         }

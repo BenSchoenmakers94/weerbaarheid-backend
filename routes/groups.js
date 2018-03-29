@@ -21,6 +21,22 @@ router.get('/', VerifyToken, function(req, res, next) {
     })
 });
 
+router.get('/:groupName', VerifyToken, function(req, res, next) {
+    Group.findOne({ groupName: 
+        new RegExp('^'+ req.params.groupName + '$', "i") }, 
+    function(err, group) {
+        if (err) {
+            return res.status(500).send("There was a problem with the server.")
+        }
+        if (!group) {
+            return res.status(404).send("No group found with " + req.params.groupName + " as it's name.")
+        }
+
+        var jsonApi = GroupSerializer.serialize(group);
+        res.status(200).send(jsonApi);
+    })
+});
+
 router.post('/', VerifyToken, function(req, res) {
     new JSONAPIDeserializer({ keyForAttribute: 'camelCase' }).deserialize(req.body, function(err, json) {
         if (err) {
