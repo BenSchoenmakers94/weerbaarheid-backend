@@ -9,7 +9,7 @@ var userSchema = new mongoose.Schema({
     birthDate: { type: Date, required: true },
     postalCode: { type: String, required: true },
     houseNumber: { type: Number, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     group: { type: mongoose.Schema.Types.ObjectId, ref: 'Group'}
 });

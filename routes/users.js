@@ -1,11 +1,12 @@
 var express = require('express');
 var bcrypt = require('bcryptjs');
 var bodyParser= require('body-parser');
-var JSONAPIDeserializer = require('jsonapi-serializer').Deserializer;
 
 var User = require('../models/user');
 var UserSerializer = require('../serializers/userSerializer');
 var VerifyToken = require('../helpers/verifyToken');
+var IsAuthorized = require('../helpers/isAuthorized');
+var DeserializePayload = require('../helpers/deserializePayload');
 
 var router = express.Router();
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -34,24 +35,32 @@ router.get('/:_id', VerifyToken, function(req, res, next) {
     })
 });
 
-router.post('/', function(req, res) {
+router.patch('/:_id', [VerifyToken, IsAuthorized, DeserializePayload], function(req, res, next) {
+    User.findByIdAndUpdate(
+        new RegExp('^'+ req.params._id + '$', "i"),
+        //<Parameters to update>,
+        { new: true, runValidators: true },
+        function(err, user) {
+            if (err) {
+                return res.status(422).send(
+                    "There was a problem with updating user " + req.params._id + ".\n Message: " + err
+                );
+            }
 
-    new JSONAPIDeserializer({ keyForAttribute: 'camelCase' }).deserialize(req.body, function(err, json) {
-        if (err) {
-            return res.status(500).send(
-                "There was a problem with the payload."
-            );
-        }
+            return res.status(200).send(user);
+        })
+});
 
-        var hashedPassword = bcrypt.hashSync(json.password, 8);
+router.post('/', DeserializePayload, function(req, res) {
+    var hashedPassword = bcrypt.hashSync(req.payload.password, 8);
         User.create({
-            _id: json.id,
-            firstName: json.firstName,
-            lastName: json.lastName,
-            birthDate: json.birthDate,
-            postalCode: json.postalCode,
-            houseNumber: json.houseNumber,
-            email: json.email,
+            _id: req.payload.id,
+            firstName: req.payload.firstName,
+            lastName: req.payload.lastName,
+            birthDate: req.payload.birthDate,
+            postalCode: req.payload.postalCode,
+            houseNumber: req.payload.houseNumber,
+            email: req.payload.email,
             password: hashedPassword
         },
         function(err, user) {
@@ -63,7 +72,6 @@ router.post('/', function(req, res) {
                 var jsonApi = UserSerializer.serialize(user);
                 res.status(201).send(jsonApi);
         });
-    });
 });
 
 module.exports = router;
