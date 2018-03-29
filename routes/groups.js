@@ -1,10 +1,10 @@
 var express = require('express');
 var bodyParser= require('body-parser');
-var JSONAPIDeserializer = require('jsonapi-serializer').Deserializer;
 
 var Group = require('../models/group');
 var GroupSerializer = require('../serializers/groupSerializer');
 var VerifyToken = require('../helpers/verifyToken');
+var DeserializePayload = require('../helpers/deserializePayload');
 
 var router = express.Router();
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -37,27 +37,19 @@ router.get('/:groupName', VerifyToken, function(req, res, next) {
     })
 });
 
-router.post('/', VerifyToken, function(req, res) {
-    new JSONAPIDeserializer({ keyForAttribute: 'camelCase' }).deserialize(req.body, function(err, json) {
+router.post('/', [VerifyToken, DeserializePayload], function(req, res) {
+    Group.create({
+        groupName: req.payload.groupName
+    },
+    function(err, group) {
         if (err) {
-            return res.status(500).send(
-                "There was a problem with the payload."
+            return res.status(422).send(
+                err.message
             );
         }
 
-        Group.create({
-            groupName: json.groupName
-        },
-        function(err, group) {
-            if (err) {
-                return res.status(422).send(
-                    err.message
-                );
-            }
-
-            var jsonApi = GroupSerializer.serialize(group);
-            res.status(201).send(jsonApi);
-        });
+        var jsonApi = GroupSerializer.serialize(group);
+        res.status(201).send(jsonApi);
     });
 });
 

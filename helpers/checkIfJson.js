@@ -1,7 +1,8 @@
 function checkIfJson(req, res, next) {
-    if (!req.get('Content-Type' === 'application/json')) {
-        res.render("TODO");
-        return;
+    req.isJSON = true;
+    var contentType = req.headers['Content-Type'];
+    if (!contentType === 'application/json') {
+        req.isJSON = false;
     }
     next();
 }

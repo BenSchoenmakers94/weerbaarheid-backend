@@ -38,7 +38,7 @@ router.post('/login', function(req, res) {
             return res.status(401).send({ auth: false, token: null });
         }
 
-        var token = jwt.sign({ id: user._id }, config.key, { expiresIn: 86400 });
+        var token = jwt.sign({ id: user._id }, config.key, { expiresIn: 8640000 });
         res.status(200).send({ auth: true, token: token });
     })
 });
