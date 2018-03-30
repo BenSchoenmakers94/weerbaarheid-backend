@@ -22,4 +22,4 @@ module.exports = mongoose.model('Group');
 
 //Email should be unique to make sure only the dedicated user has access to the content --DONE
 
-//Token set time unexpired
+//Token set time unexpired --DONE

@@ -7,6 +7,7 @@ var UserSerializer = require('../serializers/userSerializer');
 var VerifyToken = require('../helpers/verifyToken');
 var IsAuthorized = require('../helpers/isAuthorized');
 var DeserializePayload = require('../helpers/deserializePayload');
+var AttributesInPayload = require('../helpers/attributesInPayload');
 
 var router = express.Router();
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -35,10 +36,10 @@ router.get('/:_id', VerifyToken, function(req, res, next) {
     })
 });
 
-router.patch('/:_id', [VerifyToken, IsAuthorized, DeserializePayload], function(req, res, next) {
+router.patch('/:_id', [VerifyToken, IsAuthorized, DeserializePayload, AttributesInPayload], function(req, res, next) {
     User.findByIdAndUpdate(
         new RegExp('^'+ req.params._id + '$', "i"),
-        //<Parameters to update>,
+        {$set: req.attributes},
         { new: true, runValidators: true },
         function(err, user) {
             if (err) {
@@ -46,7 +47,7 @@ router.patch('/:_id', [VerifyToken, IsAuthorized, DeserializePayload], function(
                     "There was a problem with updating user " + req.params._id + ".\n Message: " + err
                 );
             }
-
+            
             return res.status(200).send(user);
         })
 });
