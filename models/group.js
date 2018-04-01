@@ -1,19 +1,18 @@
 var mongoose = require('mongoose');
 
 var groupSchema = new mongoose.Schema({
-    groupName: { type: String, required: true, unique: true }
+    _id: { type: String, required: true },
+    users: [{ type: mongoose.Schema.Types.String, ref: 'User' }]
 });
 
-mongoose.model('Group', groupSchema);
-
-module.exports = mongoose.model('Group');
+module.exports = mongoose.model('Group', groupSchema);
 
 
 //Functional ID on Groups --DONE
 //Patch requests on User --DONE
-//Relationships + Populate
+//Relationships + Populate --DONE
 //Role-based authentication
-//Notes
+//Messages
 //
 
 //Iemand met een token mag nu zomaar iemand anders aanpassen? --Role-based lost dit op?
@@ -23,3 +22,7 @@ module.exports = mongoose.model('Group');
 //Email should be unique to make sure only the dedicated user has access to the content --DONE
 
 //Token set time unexpired --DONE
+
+//Group add members
+//On user.Patch --> if req.payload.group != null --> group.findById --> callback --> 
+//if (group.members has id of user --> do nothing)  else group.members.push(id of current user)

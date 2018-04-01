@@ -1,7 +1,5 @@
 var mongoose = require('mongoose');
 
-console.log('Successful user initialization!');
-
 var userSchema = new mongoose.Schema({
     _id: { type: String, required: true },
     firstName: { type: String, required: true },
@@ -10,8 +8,7 @@ var userSchema = new mongoose.Schema({
     postalCode: { type: String, required: true },
     houseNumber: { type: Number, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    group: { type: mongoose.Schema.Types.ObjectId, ref: 'Group'}
+    password: { type: String, required: true }
 });
 
 userSchema.path('birthDate').validate(function(value) {

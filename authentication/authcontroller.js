@@ -24,10 +24,10 @@ router.get('/me', VerifyToken, function(req, res, next) {
     });
 
 //Login
-router.post('/login', function(req, res) {
+router.post('/tokens', function(req, res) {
     User.findOne({ email: req.body.email }, function(err, user) {
         if (err) {
-            return res.status(500).send("Error on the server.\n");
+            return res.status(500).send("Error on the server.\n" + err);
         }
         if (!user) {
             return res.status(404).send("No user found.");
@@ -39,7 +39,7 @@ router.post('/login', function(req, res) {
         }
 
         var token = jwt.sign({ id: user._id }, config.key, { expiresIn: 8640000 });
-        res.status(200).send({ auth: true, token: token });
+        res.status(200).send({ auth: true, id: user._id, token: token });
     })
 });
 // /Login

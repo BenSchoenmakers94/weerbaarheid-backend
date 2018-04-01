@@ -7,9 +7,7 @@ module.exports = new JSONAPISerializer('users', {
         'birthDate',
         'postalCode',
         'houseNumber',
-        'email'
-    ],
-    belongsTo: [
+        'email',
         'group'
     ]
 });

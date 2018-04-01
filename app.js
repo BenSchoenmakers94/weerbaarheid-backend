@@ -12,7 +12,7 @@ require('./config/database');
 
 //Models
 require('./models/user');
-//require('./models/group');
+require('./models/group');
 //require('./models/fillTestData');
 // /Models
 
