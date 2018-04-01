@@ -9,5 +9,15 @@ module.exports = new JSONAPISerializer('users', {
         'houseNumber',
         'email',
         'group'
-    ]
+    ],
+    messages: {
+        ref: '_id',
+        included: true,
+        attributes: [
+            'subject',
+            'content',
+            'urgent',
+            'postedAt'
+        ]
+    }
 });

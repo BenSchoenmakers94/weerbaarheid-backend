@@ -8,6 +8,8 @@ var VerifyToken = require('../helpers/verifyToken');
 var IsAuthorized = require('../helpers/isAuthorized');
 var DeserializePayload = require('../helpers/deserializePayload');
 var AttributesInPayload = require('../helpers/attributesInPayload');
+var HasRole = require('../helpers/hasRole');
+
 var addUserToGroup = require('../helpers/addUserToGroup');
 
 var router = express.Router();
@@ -32,7 +34,6 @@ router.get('/:_id', VerifyToken, function(req, res, next) {
     User.findById(new RegExp('^'+ req.params._id + '$', "i"), 
     function(err, user) {
         if (err) {
-            console.log(err);
             return res.status(500).send("There was a problem finding the list of users.");
         }
         if (!user) {
@@ -42,6 +43,14 @@ router.get('/:_id', VerifyToken, function(req, res, next) {
         var jsonApi = UserSerializer.serialize(user);
         res.status(200).send(jsonApi);
     });
+});
+
+router.delete('/:_id', HasRole, function(req, res, next) {
+    User.deleteOne({ _id: req.params._id }, function(err) {
+        if (err) {
+            res.status(404).send("There exists no record of a user with id: " + req.params._id + ".");
+        }
+    })
 });
 
 router.patch('/:_id', [VerifyToken, IsAuthorized, DeserializePayload, AttributesInPayload], function(req, res, next) {
@@ -64,36 +73,22 @@ router.patch('/:_id', [VerifyToken, IsAuthorized, DeserializePayload, Attributes
         })
 });
 
-router.post('/', DeserializePayload, function(req, res) {
-   User.findById({ _id: req.payload.id }, function(err, user) {
-       if (err) {
-           return res.status(500).send("There was a problem finding the list of users.");
-       }
-       if (user) {
-           
-           return res.status(422).send("A user with that id already exists.");
-       }
-   })
+router.post('/', [DeserializePayload, AttributesInPayload], function(req, res) {
     var hashedPassword = bcrypt.hashSync(req.payload.password, 8);
-        User.create({
-            _id: req.payload.id,
-            firstName: req.payload.firstName,
-            lastName: req.payload.lastName,
-            birthDate: req.payload.birthDate,
-            postalCode: req.payload.postalCode,
-            houseNumber: req.payload.houseNumber,
-            email: req.payload.email,
-            password: hashedPassword
-        },
-        function(err, user) {
-            if (err) {
-                return res.status(422).send(
-                    err.message
-                );
-            }
-                var jsonApi = UserSerializer.serialize(user);
-                res.status(201).send(jsonApi);
-        });
+    req.attributes['_id'] = req.payload.id;
+    req.attributes['password'] = hashedPassword;
+        
+        User.create(
+            req.attributes,
+            function(err, user) {
+                if (err) {
+                    return res.status(422).send(
+                        err.message
+                    );
+                }
+                    var jsonApi = UserSerializer.serialize(user);
+                    res.status(201).send(jsonApi);
+            });
 });
 
 module.exports = router;

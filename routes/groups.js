@@ -6,13 +6,17 @@ var GroupSerializer = require('../serializers/groupSerializer');
 var VerifyToken = require('../helpers/verifyToken');
 var DeserializePayload = require('../helpers/deserializePayload');
 var AttributesInPayload = require('../helpers/attributesInPayload');
+var HasRole = require('../helpers/hasRole');
+
 var addUserToGroup = require('../helpers/addUserToGroup');
 
 var router = express.Router();
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
-router.get('/', VerifyToken, function(req, res, next) {
+router.all('*', [VerifyToken, HasRole]);
+
+router.get('/', function(req, res, next) {
     Group.find()
     .populate('users')
     .exec(function(err, groups) {
@@ -25,7 +29,7 @@ router.get('/', VerifyToken, function(req, res, next) {
     }); 
 });
 
-router.get('/:_id', VerifyToken, function(req, res, next) {
+router.get('/:_id', function(req, res, next) {
     Group.findOne({ _id: 
         new RegExp('^'+ req.params._id + '$', "i") }, 
     function(err, group) {
@@ -43,7 +47,7 @@ router.get('/:_id', VerifyToken, function(req, res, next) {
     });
 });
 
-router.post('/', [VerifyToken, DeserializePayload], function(req, res) {
+router.post('/', DeserializePayload, function(req, res) {
     Group.create({
         _id: req.payload.id,
         users: req.payload.users
@@ -60,7 +64,8 @@ router.post('/', [VerifyToken, DeserializePayload], function(req, res) {
     });
 });
 
-router.patch('/:_id', [VerifyToken, DeserializePayload], function(req, res) {
+router.patch('/:_id', DeserializePayload, function(req, res) {
+    console.log(req.payload[0].users);
     if(!req.payload[0].users[0].id) {
         return res.status(422).send('Missing user information in body.');
     }
