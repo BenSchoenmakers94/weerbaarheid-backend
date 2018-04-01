@@ -24,7 +24,10 @@ app.use('/', authController);
 var userRoute = require('./routes/users');
 app.use('/users', userRoute);
  
-var userRoute = require('./routes/groups');
-app.use('/groups', userRoute);
+var groupRoute = require('./routes/groups');
+app.use('/groups', groupRoute);
+
+var messageRoute = require('./routes/messages');
+app.use('/messages', messageRoute);
 
 module.exports = app;

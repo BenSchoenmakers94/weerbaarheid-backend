@@ -7,6 +7,7 @@ function deserializePayload(req, res, next) {
                 "There was a problem with the payload."
             );
         }
+        
         req.payload = json;
         next();
     });

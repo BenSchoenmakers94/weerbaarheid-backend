@@ -8,7 +8,8 @@ var userSchema = new mongoose.Schema({
     postalCode: { type: String, required: true },
     houseNumber: { type: Number, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true }
+    password: { type: String, required: true },
+    messages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }]
 });
 
 userSchema.path('birthDate').validate(function(value) {
@@ -23,6 +24,20 @@ userSchema.path('postalCode').validate(function(value) {
 userSchema.path('houseNumber').validate(function(value) {
     return value > 0;
 }, "A housenumber higher than 0 must be entered.");
+
+userSchema.statics.getUsersWithSameLastName = function(lastName, callback) {
+    var usersWithSameLastName = [];
+    this.find({ 'lastName': lastName }, function(err, users) {
+        if (err) {
+            callback(err);
+        } else {
+        users.forEach(user => {
+            usersWithSameLastName.push(user);
+        });
+        callback(usersWithSameLastName);
+    }
+    });
+}
 
 mongoose.model('User', userSchema);
 

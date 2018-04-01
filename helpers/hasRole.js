@@ -1,0 +1,15 @@
+var Group = require('../models/group');
+
+function hasRole (req, res, next) {
+    Group.findUser(req.userId, function(err, group) {
+        if (err) {
+            return res.status(404).send("No group was assigned to the specified user." + err);
+        }
+        if (!(group._id === 'Administrator')) {
+            return res.status(403).send("Only users in the Administrator group have access.");
+        }
+    });
+    next();
+}
+
+module.exports = hasRole;
