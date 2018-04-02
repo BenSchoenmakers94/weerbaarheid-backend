@@ -2,7 +2,7 @@ var Group = require('../../models/group');
 var GroupSerializer = require('../../serializers/groupSerializer');
 
 module.exports = (req, res) => {
-    Group.find()
+    Group.find(req.where, req.fields, req.options)
     .populate('users')
     .exec(function(err, groups) {
         if (err) {

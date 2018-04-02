@@ -2,7 +2,7 @@ var Message = require('../../models/message');
 var messageSerializer = require('../../serializers/messageSerializer');
 
 module.exports = (req, res) => {
-    Message.find({}, function(err, messages) {
+    Message.find(req.where, req.fields, req.options, function(err, messages) {
         if (err) {
             return res.status(500).send("There was a problem finding the list of message.");
         }
