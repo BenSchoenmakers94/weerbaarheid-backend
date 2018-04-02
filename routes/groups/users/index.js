@@ -11,6 +11,10 @@ const HasRole = require('../../../helpers/hasRole');
 const DeserializePayload = require('../../../helpers/deserializePayload');
 const AttributesInPayload = require('../../../helpers/attributesInPayload'); 
 
+const MessagesWithUser = require('./messages');
+
+users.use('/:userId/messages', MessagesWithUser);
+
 users.get('/', [VerifyToken, HasRole], all);
 users.get('/:userId', [VerifyToken, HasRole], single);
 users.post('/:userId', [VerifyToken, HasRole], add);

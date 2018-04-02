@@ -3,7 +3,7 @@ var User = require('../../../models/user');
 var UserSerializer = require('../../../serializers/userSerializer');
 
 module.exports = (req, res) => {
-    var succes = false;
+    var foundObj = {};
     Group.findById(req.object._id)
     .populate('users')
     .exec(function(err, group) {
@@ -20,13 +20,17 @@ module.exports = (req, res) => {
 
             group.users.forEach(userInGroup => {
                 if (userInGroup._id === user._id) {
-                    succes = true;
+                    foundObj = user._id;
                 }
             });
 
-            if (succes) {
-                var jsonApi = UserSerializer.serialize(user);
-                return res.status(200).send(jsonApi);
+            if (foundObj) {
+                User.findById(user._id)
+                .populate('messages')
+                .exec(function(err, user) {
+                    var jsonapi = UserSerializer.serialize(user);
+                    res.status(200).send(jsonapi);
+                });
             } else {
                 return res.status(404).send("No user found with provided ID in provided group.");
             }
