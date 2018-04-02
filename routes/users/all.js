@@ -2,7 +2,9 @@ var User = require('../../models/user');
 var UserSerializer = require('../../serializers/userSerializer');
 
 module.exports = (req, res) => {
-    User.find({}, function(err, users) {
+    User.find({})
+    .populate('messages')
+    .exec(function(err, users) {
         if (err) {
             return res.status(500).send("There was a problem finding the list of users.");
         }
@@ -11,6 +13,6 @@ module.exports = (req, res) => {
         }
 
         var jsonApi = UserSerializer.serialize(users);
-        res.status(200).send(jsonApi);
-    })
+        res.status(200).send(jsonApi)
+    });
 }

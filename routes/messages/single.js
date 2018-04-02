@@ -1,5 +1,9 @@
-const messages = require('express').Router();
+var Message = require('../../models/message');
+var messageSerializer = require('../../serializers/messageSerializer');
 
-messages.get();
+module.exports = (req, res) => {
+    const message = req.object;
 
-module.exports = messages;
+    var jsonApi = messageSerializer.serialize(message);
+    res.status(200).send(jsonApi);
+}

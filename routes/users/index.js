@@ -15,7 +15,11 @@ const AttributesInPayload = require('../../helpers/attributesInPayload');
 const findObject = require('../../helpers/findObject')
 const User = require('../../models/user');
 
+const MessageRoutes = require('./messages');
+
 users.param('userId', findObject(User));
+
+users.use('/:userId/messages', MessageRoutes);
 
 users.get('/:userId', [VerifyToken, HasRole], single);
 users.patch('/:userId', [VerifyToken, IsAuthorized, DeserializePayload, ParamsEqualToSender, AttributesInPayload], modify)

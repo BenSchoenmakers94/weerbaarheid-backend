@@ -12,7 +12,6 @@ module.exports = (req, res) => {
         }
         User.findById(new RegExp('^'+ req.params.userId + '$', "i"), function(err, user) {
             if (err) {
-                console.log(err);
                 return res.status(500).send("There is something wrong with the server.");
             }
             if (!user) {

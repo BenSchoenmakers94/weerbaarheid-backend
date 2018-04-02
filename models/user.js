@@ -9,7 +9,7 @@ var userSchema = new mongoose.Schema({
     houseNumber: { type: Number, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    messages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }]
+    messages: [{ type: mongoose.Schema.Types.String, ref: 'Message' }]
 });
 
 userSchema.path('birthDate').validate(function(value) {
@@ -37,10 +37,6 @@ userSchema.statics.getUsersWithSameLastName = function(lastName, callback) {
         callback(usersWithSameLastName);
     }
     });
-}
-
-userSchema.statics.findMessageInstanceWithUsers = function(messageId, callback) {
-    return this.model('User').find({ 'message': { _id: messageId } }, callback);
 }
 
 mongoose.model('User', userSchema);

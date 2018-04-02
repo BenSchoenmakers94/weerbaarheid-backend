@@ -11,7 +11,7 @@ routes.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
 const users = require('./users');
 const groups = require('./groups');
-// const messages = require('./messages');
+const messages = require('./messages');
 
 routes.get('/', (req, res) => {
   res.status(200).json({ message: 'Connected!' });
@@ -38,6 +38,6 @@ routes.post('/tokens', function(req, res) {
 
 routes.use('/users', users);
 routes.use('/groups', groups);
-// routes.use('/messages', messages);
+routes.use('/messages', messages);
 
 module.exports = routes;
