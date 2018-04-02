@@ -4,6 +4,7 @@ var cors = require('cors');
 var app = express();
 
 app.use(cors());
+app.set('view engine', 'pug')
 app.use(queryHandler.fields());
 app.use(queryHandler.filter());
 app.use(queryHandler.pagination({limit: 25}));
