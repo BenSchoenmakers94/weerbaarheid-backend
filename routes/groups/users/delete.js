@@ -1,6 +1,6 @@
 var User = require('../../../models/user');
 var Group = require('../../../models/group');
-var GroupSerializer = require('../../../serializers/groupSerializer');
+var ResourceSerializer = require('../../../serializers/resourceSerializer');
 
 module.exports = (req, res) => {
     User.findById(new RegExp('^'+ req.params.userId + '$', "i"), function(err, user) {
@@ -17,7 +17,7 @@ module.exports = (req, res) => {
            { new: true })
            .populate('users')
            .exec(function(err, group) {
-            var jsonapi = GroupSerializer.serialize(group);
+            var jsonapi = ResourceSerializer.serialize('Group', group);
             return res.status(200).send(jsonapi);
             });  
     });

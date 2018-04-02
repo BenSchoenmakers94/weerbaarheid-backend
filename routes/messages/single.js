@@ -1,9 +1,9 @@
 var Message = require('../../models/message');
-var messageSerializer = require('../../serializers/messageSerializer');
+var ResourceSerializer = require('../../serializers/resourceSerializer');
 
 module.exports = (req, res) => {
     const message = req.object;
 
-    var jsonApi = messageSerializer.serialize(message);
+    var jsonApi = ResourceSerializer.serialize('Message', message);
     res.status(200).send(jsonApi);
 }

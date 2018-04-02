@@ -1,5 +1,5 @@
 var Message = require('../../models/message');
-var messageSerializer = require('../../serializers/messageSerializer');
+var ResourceSerializer = require('../../serializers/resourceSerializer');
 
 module.exports = (req, res) => {
     Message.find(req.where, req.fields, req.options, function(err, messages) {
@@ -10,7 +10,7 @@ module.exports = (req, res) => {
             return res.status(404).send("No messages found.");
         }
 
-        var jsonApi = messageSerializer.serialize(messages);
+        var jsonApi = ResourceSerializer.serialize('Message', messages, { meta: { pagination: req.options, filters: req.where } });
         res.status(200).send(jsonApi);
     });
 }

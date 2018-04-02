@@ -1,10 +1,14 @@
-var JSONAPISerializer = require('jsonapi-serializer').Serializer;
+module.exports = {
+    type: 'messages',
 
-module.exports = new JSONAPISerializer('messages', {
-    attributes: [
-        'subject',
-        'content',
-        'postedAt',
-        'urgent'
-    ]
-});
+    structure: function(opts = {}) {
+        return Object.assign(opts, {
+            attributes: [
+                'subject',
+                'content',
+                'postedAt',
+                'urgent'
+            ]
+        })
+    }
+}
