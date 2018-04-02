@@ -14,8 +14,9 @@ module.exports = (req, res) => {
                     );
                 }
 
-                addMessageToUser(res, req.payload.id, req.object._id);
-                var jsonApi = MessageSerializer.serialize(message);
-                res.status(201).send(jsonApi);
+                addMessageToUser(res, req.payload.id, req.object._id).then(function(result) {
+                    var jsonApi = MessageSerializer.serialize(message);
+                    res.status(201).send(jsonApi);
+                });
             });
 }

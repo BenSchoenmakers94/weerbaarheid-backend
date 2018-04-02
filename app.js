@@ -3,6 +3,7 @@ var cors = require('cors');
 var app = express();
 
 app.use(cors());
+app.set('view engine', 'pug')
 
 //Init
 require('./config/credentials');
