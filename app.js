@@ -1,8 +1,13 @@
 var express = require('express');
+var queryHandler = require('express-api-queryhandler');
 var cors = require('cors');
 var app = express();
 
 app.use(cors());
+app.use(queryHandler.fields());
+app.use(queryHandler.filter());
+app.use(queryHandler.pagination({limit: 25}));
+app.use(queryHandler.sort());
 
 //Init
 require('./config/credentials');

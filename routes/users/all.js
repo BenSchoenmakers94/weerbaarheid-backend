@@ -2,7 +2,7 @@ var User = require('../../models/user');
 var UserSerializer = require('../../serializers/userSerializer');
 
 module.exports = (req, res) => {
-    User.find({})
+    User.find(req.where, req.fields, req.options)
     .populate('messages')
     .exec(function(err, users) {
         if (err) {
