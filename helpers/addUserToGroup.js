@@ -25,7 +25,7 @@ function addUserToGroup(res, userId, groupId) {
              {$addToSet: {
                 users: userId
              }},
-             { new: true, runValidators: true },
+             { new: true, runValidator: true },
              function(err, group) {
             if (err) {
                 reject(res.status(500).send("There is a problem with the server."));

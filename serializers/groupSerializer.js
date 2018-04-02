@@ -1,19 +1,23 @@
-var JSONAPISerializer = require('jsonapi-serializer').Serializer;
+module.exports = {
+    type: 'groups',
 
-module.exports = new JSONAPISerializer('groups', {
-    attributes: [
-        'users',
-    ],
-    users: {
-        ref: '_id',
-        included: true,
-        attributes: [
-            'firstName',
-            'lastName',
-            'birthDate',
-            'postalCode',
-            'houseNumber',
-            'email',
-        ]
+    structure: (opts = {}) => {
+        return Object.assign(opts, {
+            attributes: [
+                'users',
+            ],
+            users: {
+                ref: '_id',
+                included: true,
+                attributes: [
+                    'firstName',
+                    'lastName',
+                    'birthDate',
+                    'postalCode',
+                    'houseNumber',
+                    'email',
+                ]
+            }
+        });
     }
-});
+}
