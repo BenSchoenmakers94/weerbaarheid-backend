@@ -18,7 +18,7 @@ const messages = require('./messages');
 
 routes.get('/', checkIfJson, (req, res) => {
     if (req.format === 'HTML') {
-        res.render('index', { title: 'Hey Hey Hey!', message: 'Yo Yo'});
+        res.render('index', { title: 'Punt Weerbaarheid API', message: 'Welcome to the Punt Weerbaarheid API!'});
     } else {
         res.status(200).json({ message: 'Connected!' });
     }

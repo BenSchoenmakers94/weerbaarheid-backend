@@ -6,11 +6,14 @@ const create = require('./create');
 
 const VerifyToken = require('../../../../helpers/verifyToken');
 const IsAuthorized = require('../../../../helpers/isAuthorized');
+const HasRole = require('../../../../helpers/hasRole');
 const DeserializePayload = require('../../../../helpers/deserializePayload');
 const AttributesInPayload = require('../../../../helpers/attributesInPayload'); 
 
-messages.get('/', [VerifyToken, IsAuthorized], all);
-messages.get('/:messageId', [VerifyToken, IsAuthorized], single);
-messages.post('/', [VerifyToken, IsAuthorized, DeserializePayload, AttributesInPayload], create);
+messages.all('*', [VerifyToken, HasRole]);
+
+messages.get('/',  IsAuthorized, all);
+messages.get('/:messageId', IsAuthorized, single);
+messages.post('/', [DeserializePayload, AttributesInPayload], create);
 
 module.exports = messages;

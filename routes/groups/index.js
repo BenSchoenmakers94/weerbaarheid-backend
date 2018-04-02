@@ -17,8 +17,9 @@ groups.param('groupId', findObject(Group));
 
 groups.use('/:groupId/users', UsersInGroup);
 
-groups.get('/:groupId', [VerifyToken, HasRole], single);
-groups.get('/', [VerifyToken, HasRole], all);
+groups.all('*', [VerifyToken, HasRole]);
+groups.get('/:groupId', single);
+groups.get('/', all);
 
 module.exports = groups;
 
