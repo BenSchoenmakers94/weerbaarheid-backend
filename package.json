@@ -2,7 +2,9 @@
   "name": "Weerbaarheid",
   "version": "0.0.0",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "test": "mocha"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
@@ -12,5 +14,8 @@
     "jsonwebtoken": "^8.2.0",
     "mongoose": "^5.0.7",
     "q": "^1.4.1"
+  },
+  "devDependencies": {
+    "mocha": "^5.0.5"
   }
 }
