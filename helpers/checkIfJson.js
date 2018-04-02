@@ -1,9 +1,9 @@
 function checkIfJson(req, res, next) {
-    req.isJSON = true;
-    var contentType = req.headers['Content-Type'];
-    if (!contentType === 'application/json') {
-        req.isJSON = false;
+    var response  = req.headers['accept'];
+    if (new RegExp('text/html', 'i').test(response)) {
+        req.format = 'HTML';
     }
+    
     next();
 }
 

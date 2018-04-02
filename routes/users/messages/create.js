@@ -13,9 +13,10 @@ module.exports = (req, res) => {
                         err.message
                     );
                 }
-
-                addMessageToUser(res, req.payload.id, req.object._id);
-                var jsonApi = ResourceSerializer.serialize('Message', message);
-                res.status(201).send(jsonApi);
+              
+                addMessageToUser(res, req.payload.id, req.object._id).then(function(result){
+                  var jsonApi = ResourceSerializer.serialize('Message', message);
+                  res.status(201).send(jsonApi);
+                });
             });
 }
