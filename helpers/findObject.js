@@ -1,6 +1,6 @@
 module.exports = type => {
   return (req, res, next, value) => {
-    const obj = type.findById(new RegExp('^'+ value + '$', "i"), function(err, obj) {
+    const obj = type.findById(new RegExp('^'+ value + '$', "i"), req.fields, function(err, obj) {
         if (obj) {
             req.object = obj;
             next();

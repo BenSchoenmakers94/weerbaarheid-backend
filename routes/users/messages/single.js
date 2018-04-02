@@ -1,6 +1,6 @@
 var User = require('../../../models/user');
 var Message = require('../../../models/message');
-var MessageSerializer = require('../../../serializers/messageSerializer');
+var ResourceSerializer = require('../../../serializers/resourceSerializer');
 
 module.exports = (req, res) => {
     var succes = false;
@@ -10,7 +10,7 @@ module.exports = (req, res) => {
         if (err) {
             return res.status(500).send("There is something wrong with the server.");
         }
-        Message.findById(new RegExp('^'+ req.params.messageId + '$', "i"), function(err, message) {
+        Message.findById(new RegExp('^'+ req.params.messageId + '$', "i"), req.fields, function(err, message) {
             if (err) {
                 return res.status(500).send("There is something wrong with the server.");
             }
@@ -25,7 +25,7 @@ module.exports = (req, res) => {
             });
 
             if (succes) {
-                var jsonApi = MessageSerializer.serialize(message);
+                var jsonApi = ResourceSerializer.serialize('Message', message);
                 return res.status(200).send(jsonApi);
             } else {
                 return res.status(404).send("No message found with provided ID in provided user.");
