@@ -39,6 +39,10 @@ userSchema.statics.getUsersWithSameLastName = function(lastName, callback) {
     });
 }
 
+userSchema.statics.findMessageInstanceWithUsers = function(messageId, callback) {
+    return this.model('User').find({ 'message': { _id: messageId } }, callback);
+}
+
 mongoose.model('User', userSchema);
 
 module.exports = mongoose.model('User');
