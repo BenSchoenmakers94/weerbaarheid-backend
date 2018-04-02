@@ -18,7 +18,7 @@ const messages = require('./messages');
 
 routes.get('/', checkIfJson, (req, res) => {
     if (req.format === 'HTML') {
-        res.render('index', { title: 'Hey Hey Hey!', message: 'Yo Yo'});
+        res.render('index', { title: 'Punt Weerbaarheid API', message: 'Welcome to the Punt Weerbaarheid API!'});
     } else {
         res.status(200).json({ message: 'Connected!' });
     }
@@ -40,7 +40,7 @@ routes.post('/tokens', function(req, res) {
 
       externalAPI().then(function(result) {
         var token = jwt.sign({ id: user._id }, config.key, { expiresIn: 8640000 });
-        res.status(200).write({ auth: true, id: user._id, token: token, result });
+        res.status(200).send({ auth: true, id: user._id, token: token, result });
       });
   });
 });

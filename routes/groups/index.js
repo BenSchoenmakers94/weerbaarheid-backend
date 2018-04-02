@@ -6,6 +6,7 @@ const single = require('./single');
 const VerifyToken = require('../../helpers/verifyToken');
 const IsAuthorized = require('../../helpers/isAuthorized');
 const HasRole = require('../../helpers/hasRole');
+const CheckIfJSON = require('../../helpers/checkIfJson');
 const DeserializePayload = require('../../helpers/deserializePayload');
 const AttributesInPayload = require('../../helpers/attributesInPayload');
 const findObject = require('../../helpers/findObject')
@@ -17,8 +18,9 @@ groups.param('groupId', findObject(Group));
 
 groups.use('/:groupId/users', UsersInGroup);
 
-groups.get('/:groupId', [VerifyToken, HasRole], single);
-groups.get('/', [VerifyToken, HasRole], all);
+groups.all('*', [VerifyToken, HasRole, CheckIfJSON]);
+groups.get('/:groupId', single);
+groups.get('/', all);
 
 module.exports = groups;
 

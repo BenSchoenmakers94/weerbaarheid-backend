@@ -13,6 +13,10 @@ module.exports = (req, res) => {
         }
 
         var jsonApi = ResourceSerializer.serialize('User', users, { meta: { pagination: req.options, filters: req.where } });
-        res.status(200).send(jsonApi)
+        if (req.format === 'HTML') {
+            res.render('userSingle', { users: users});
+        } else {
+        res.status(200).send(jsonapi);
+        }
     });
 }

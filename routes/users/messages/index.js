@@ -6,8 +6,11 @@ const create = require('./create');
 
 const VerifyToken = require('../../../helpers/verifyToken');
 const IsAuthorized = require('../../../helpers/isAuthorized');
+const CheckIfJSON = require('../../../helpers/checkIfJson');
 const DeserializePayload = require('../../../helpers/deserializePayload');
 const AttributesInPayload = require('../../../helpers/attributesInPayload'); 
+
+messages.all('*', CheckIfJSON);
 
 messages.get('/', [VerifyToken, IsAuthorized], all);
 messages.get('/:messageId', [VerifyToken, IsAuthorized], single);

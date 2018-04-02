@@ -28,8 +28,13 @@ module.exports = (req, res) => {
                 User.findById(user._id, req.fields)
                 .populate('messages')
                 .exec(function(err, user) {
-                    var jsonapi = ResourceSerializer.serialize('User', user);
+                     var jsonapi = ResourceSerializer.serialize('User', user);
+
+                    if (req.format === 'HTML') {
+                        res.render('userSingle', { users: [user]});
+                    } else {
                     res.status(200).send(jsonapi);
+                    }
                 });
             } else {
                 return res.status(404).send("No user found with provided ID in provided group.");

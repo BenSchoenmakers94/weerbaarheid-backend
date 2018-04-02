@@ -5,5 +5,9 @@ module.exports = (req, res) => {
     const message = req.object;
 
     var jsonApi = ResourceSerializer.serialize('Message', message);
-    res.status(200).send(jsonApi);
+    if (req.format === 'HTML') {
+        res.render('messageSingle', { messages: [message]});
+    } else {
+    res.status(200).send(jsonapi);
+    }
 }

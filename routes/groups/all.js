@@ -9,7 +9,11 @@ module.exports = (req, res) => {
             return res.status(500).send("There was a problem finding the list of groups");
         }
 
-        var jsonApi = ResourceSerializer.serialize('Group', groups, { meta: { pagination: req.options, filters: req.where } });
-        res.status(200).send(jsonApi);
+       var jsonApi = ResourceSerializer.serialize('Group', groups, { meta: { pagination: req.options, filters: req.where } });
+        if (req.format === 'HTML') {
+            res.render('groupSingle', { groups: groups});
+        } else {
+        res.status(200).send(jsonapi);
+        }
     }); 
 }

@@ -9,6 +9,7 @@ const remove = require('./delete');
 const VerifyToken = require('../../helpers/verifyToken');
 const IsAuthorized = require('../../helpers/isAuthorized');
 const HasRole = require('../../helpers/hasRole');
+const CheckIfJSON = require('../../helpers/checkIfJson');
 const ParamsEqualToSender = require('../../helpers/paramsEqualToSender');
 const DeserializePayload = require('../../helpers/deserializePayload');
 const AttributesInPayload = require('../../helpers/attributesInPayload');
@@ -20,6 +21,8 @@ const MessageRoutes = require('./messages');
 users.param('userId', findObject(User));
 
 users.use('/:userId/messages', MessageRoutes);
+
+users.all('*', CheckIfJSON);
 
 users.get('/:userId', [VerifyToken, HasRole], single);
 users.patch('/:userId', [VerifyToken, IsAuthorized, DeserializePayload, ParamsEqualToSender, AttributesInPayload], modify)
