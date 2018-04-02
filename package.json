@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test": "mocha"
+    "test": "nyc mocha"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -16,9 +16,20 @@
     "jsonwebtoken": "^8.2.0",
     "mongoose": "^5.0.7",
     "popper.js": "^1.14.1",
+    "chai": "^4.1.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "express-api-queryhandler": "^0.4.3",
+    "jsonapi-serializer": "^3.5.6",
+    "jsonwebtoken": "^8.2.0",
+    "mongoose": "^5.0.7",
+    "node-uuid": "^1.4.8",
+    "nyc": "^11.6.0",
     "pug": "^2.0.3",
     "q": "^1.4.1",
     "request-json": "^0.6.3",
+    "sinon": "^4.5.0",
+    "uuid": "^3.2.1",
     "ws": "^5.1.1"
   },
   "devDependencies": {

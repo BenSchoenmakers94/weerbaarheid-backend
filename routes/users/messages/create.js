@@ -1,6 +1,6 @@
 var Message = require('../../../models/message');
 var addMessageToUser = require('../../../helpers/addMessageToUser');
-var MessageSerializer = require('../../../serializers/messageSerializer');
+var ResourceSerializer = require('../../../serializers/resourceSerializer');
 
 module.exports = (req, res) => {
     req.attributes['_id'] = req.payload.id;
@@ -13,10 +13,10 @@ module.exports = (req, res) => {
                         err.message
                     );
                 }
-
-                addMessageToUser(res, req.payload.id, req.object._id).then(function(result) {
-                    var jsonApi = MessageSerializer.serialize(message);
-                    res.status(201).send(jsonApi);
+              
+                addMessageToUser(res, req.payload.id, req.object._id).then(function(result){
+                  var jsonApi = ResourceSerializer.serialize('Message', message);
+                  res.status(201).send(jsonApi);
                 });
             });
 }

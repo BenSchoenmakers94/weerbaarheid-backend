@@ -1,6 +1,6 @@
 var Group = require('../../../models/group');
 var User = require('../../../models/user');
-var UserSerializer = require('../../../serializers/userSerializer');
+var ResourceSerializer = require('../../../serializers/resourceSerializer');
 
 module.exports = (req, res) => {
     var foundObj = {};
@@ -25,10 +25,10 @@ module.exports = (req, res) => {
             });
 
             if (foundObj) {
-                User.findById(user._id)
+                User.findById(user._id, req.fields)
                 .populate('messages')
                 .exec(function(err, user) {
-                    var jsonapi = UserSerializer.serialize(user);
+                     var jsonapi = ResourceSerializer.serialize('User', user);
 
                     if (req.format === 'HTML') {
                         res.render('userSingle', { users: [user]});

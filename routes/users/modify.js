@@ -1,7 +1,7 @@
 var bcrypt = require('bcryptjs');
 
 var User = require('../../models/user');
-var UserSerializer = require('../../serializers/userSerializer');
+var ResourceSerializer = require('../../serializers/resourceSerializer');
 
 
 module.exports = (req, res) => {
@@ -16,7 +16,7 @@ module.exports = (req, res) => {
                 );
             }
 
-            var jsonapi = UserSerializer.serialize(user)
+            var jsonapi = ResourceSerializer.serialize('User', user);
             return res.status(200).send(jsonapi);
         })
 }

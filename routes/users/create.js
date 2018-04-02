@@ -2,7 +2,7 @@ var bcrypt = require('bcryptjs');
 
 var User = require('../../models/user');
 var addUserToGroup = require('../../helpers/addUserToGroup');
-var UserSerializer = require('../../serializers/userSerializer');
+var ResourceSerializer = require('../../serializers/resourceSerializer');
 
 
 module.exports = (req, res) => {
@@ -20,7 +20,7 @@ module.exports = (req, res) => {
                 }
 
                 addUserToGroup(res, req.payload.id, 'Client');
-                var jsonApi = UserSerializer.serialize(user);
+                var jsonApi = ResourceSerializer.serialize('User', user);
                 res.status(201).send(jsonApi);
             });
 }

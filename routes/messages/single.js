@@ -1,10 +1,10 @@
 var Message = require('../../models/message');
-var messageSerializer = require('../../serializers/messageSerializer');
+var ResourceSerializer = require('../../serializers/resourceSerializer');
 
 module.exports = (req, res) => {
     const message = req.object;
 
-    var jsonApi = messageSerializer.serialize(message);
+    var jsonApi = ResourceSerializer.serialize('Message', message);
     if (req.format === 'HTML') {
         res.render('messageSingle', { messages: [message]});
     } else {

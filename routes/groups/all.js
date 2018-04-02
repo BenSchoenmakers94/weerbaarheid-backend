@@ -1,15 +1,15 @@
 var Group = require('../../models/group');
-var GroupSerializer = require('../../serializers/groupSerializer');
+var ResourceSerializer = require('../../serializers/resourceSerializer');
 
 module.exports = (req, res) => {
-    Group.find()
+    Group.find(req.where, req.fields, req.options)
     .populate('users')
     .exec(function(err, groups) {
         if (err) {
             return res.status(500).send("There was a problem finding the list of groups");
         }
 
-        var jsonApi = GroupSerializer.serialize(groups);
+       var jsonApi = ResourceSerializer.serialize('Group', groups, { meta: { pagination: req.options, filters: req.where } });
         if (req.format === 'HTML') {
             res.render('groupSingle', { groups: groups});
         } else {

@@ -1,9 +1,9 @@
 var User = require('../../models/user');
-var UserSerializer = require('../../serializers/userSerializer');
+var ResourceSerializer = require('../../serializers/resourceSerializer');
 
 module.exports = (req, res) => {
     const user = req.object;
-    User.findById(user._id)
+    User.findById(user._id, req.fields)
     .populate('messages')
     .exec(function(err, user) {
         if (err) {
@@ -13,7 +13,7 @@ module.exports = (req, res) => {
             return res.status(404).send("No users found.");
         }
 
-        var jsonApi = UserSerializer.serialize(user);
+        var jsonApi = ResourceSerializer.serialize('User', users);
         if (req.format === 'HTML') {
             res.render('userSingle', { users: [user]});
         } else {

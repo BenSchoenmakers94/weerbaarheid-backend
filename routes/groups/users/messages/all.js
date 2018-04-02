@@ -1,5 +1,6 @@
 var User = require('../../../../models/user');
-var MessageSerializer = require('../../../../serializers/messageSerializer');
+var Message = require('../../../../models/message');
+var ResourceSerializer = require('../../../../serializers/resourceSerializer');
 
 module.exports = (req, res) => {
     User.findById(req.userId, function(err, user) {
@@ -10,13 +11,13 @@ module.exports = (req, res) => {
             return res.status(404).send("User does not exist in group.");
         }
     })
-    .populate('messages')
+    .populate('messages', req.fields, Message, req.where, req.options)
     .exec(function(err, user) {
-        var jsonapi = MessageSerializer.serialize(user.messages);
+        var jsonapi = ResourceSerializer.serialize('Message', user.messages, { meta: { pagination: req.options, filter: req.where } });
         if (req.format === 'HTML') {
             res.render('messageSingle', { messages: user.messages});
         } else {
-        res.status(200).send(jsonapi);
+          res.status(200).send(jsonapi);
         }
     })
   };

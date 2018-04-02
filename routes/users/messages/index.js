@@ -13,7 +13,7 @@ const AttributesInPayload = require('../../../helpers/attributesInPayload');
 messages.all('*', CheckIfJSON);
 
 messages.get('/', [VerifyToken, IsAuthorized], all);
-messages.get('/:userId', [VerifyToken, IsAuthorized], single);
+messages.get('/:messageId', [VerifyToken, IsAuthorized], single);
 messages.post('/', [VerifyToken, IsAuthorized, DeserializePayload, AttributesInPayload], create);
 
 module.exports = messages;
