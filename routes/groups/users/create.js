@@ -1,9 +1,8 @@
 var bcrypt = require('bcryptjs');
 
-var User = require('../../models/user');
-var addUserToGroup = require('../../helpers/addUserToGroup');
-var UserSerializer = require('../../serializers/userSerializer');
-
+var User = require('../../../models/user');
+var addUserToGroup = require('../../../helpers/addUserToGroup');
+var UserSerializer = require('../../../serializers/userSerializer');
 
 module.exports = (req, res) => {
     var hashedPassword = bcrypt.hashSync(req.payload.password, 8);
@@ -19,7 +18,7 @@ module.exports = (req, res) => {
                     );
                 }
 
-                addUserToGroup(res, req.payload.id, 'Client');
+                addUserToGroup(res, req.payload.id, req.object._id);
                 var jsonApi = UserSerializer.serialize(user);
                 res.status(201).send(jsonApi);
             });

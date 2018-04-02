@@ -10,7 +10,7 @@ routes.use(bodyParser.urlencoded({ extended: false }));
 routes.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
 const users = require('./users');
-// const groups = require('./groups');
+const groups = require('./groups');
 // const messages = require('./messages');
 
 routes.get('/', (req, res) => {
@@ -37,7 +37,7 @@ routes.post('/tokens', function(req, res) {
 });
 
 routes.use('/users', users);
-// routes.use('/groups', groups);
+routes.use('/groups', groups);
 // routes.use('/messages', messages);
 
 module.exports = routes;

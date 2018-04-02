@@ -6,5 +6,4 @@ module.exports = (req, res) => {
 
     var jsonApi = UserSerializer.serialize(user);
     res.status(200).send(jsonApi);
-
 }

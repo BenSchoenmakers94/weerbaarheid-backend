@@ -5,7 +5,7 @@ module.exports = type => {
             req.object = obj;
             next();
           } else {
-            return res.status(404).send(`Invalid ID`);
+            return res.status(404).send('Invalid ID: ' + value + '.');
           }
     });
   };

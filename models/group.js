@@ -5,28 +5,4 @@ var groupSchema = new mongoose.Schema({
     users: [{ type: mongoose.Schema.Types.String, ref: 'User' }]
 });
 
-groupSchema.statics.findUser = function findUser(userId, callback) {
-    return this.model('Group').find({ 'users': { _id: userId } }, callback);
-}
-
 module.exports = mongoose.model('Group', groupSchema);
-
-
-//Functional ID on Groups --DONE
-//Patch requests on User --DONE
-//Relationships + Populate --DONE
-//Role-based authentication --DONE
-//Messages --DONE
-//
-
-//Iemand met een token mag nu zomaar iemand anders aanpassen? --Role-based lost dit op?
-//Rollen < Administrator mogen alleen zichzelf aanpassen
-//if role < administrator then is _id of pendingUpdate the _id of RequestingUser? --DONE
-
-//Email should be unique to make sure only the dedicated user has access to the content --DONE
-
-//Token set time unexpired --DONE
-
-//Group add members
-//On user.Patch --> if req.payload.group != null --> group.findById --> callback --> 
-//if (group.members has id of user --> do nothing)  else group.members.push(id of current user) --DONE
