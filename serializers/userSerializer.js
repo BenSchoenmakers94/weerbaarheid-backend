@@ -8,7 +8,7 @@ module.exports = new JSONAPISerializer('users', {
         'postalCode',
         'houseNumber',
         'email',
-        'group'
+        'messages'
     ],
     messages: {
         ref: '_id',

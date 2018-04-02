@@ -10,24 +10,9 @@ require('./config/database');
 // /Init
 
 
-//Models
-require('./models/user');
-require('./models/group');
-//require('./models/fillTestData');
-// /Models
-
-//Authentication
-var authController = require('./authentication/authcontroller');
-app.use('/', authController);
-// /Authentication
-
-var userRoute = require('./routes/users');
-app.use('/users', userRoute);
- 
-var groupRoute = require('./routes/groups');
-app.use('/groups', groupRoute);
-
-var messageRoute = require('./routes/messages');
-app.use('/messages', messageRoute);
+//Routes
+const routes = require('./routes');
+app.use('/', routes);
+// /Routes
 
 module.exports = app;
