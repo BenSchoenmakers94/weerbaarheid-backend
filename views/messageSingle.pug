@@ -1,0 +1,11 @@
+html  
+  head
+  body
+    ul
+    for message in messages
+       li= "subject " + message.subject
+       li= "urgent " + message.urgent
+       li= "posted at " + message.postedAt
+       li= "content " + message.content
+       li= "-----------------------------------"
+     

@@ -13,6 +13,10 @@ module.exports = (req, res) => {
         }
 
         var jsonApi = UserSerializer.serialize(users);
-        res.status(200).send(jsonApi)
+        if (req.format === 'HTML') {
+            res.render('userSingle', { users: users});
+        } else {
+        res.status(200).send(jsonapi);
+        }
     });
 }

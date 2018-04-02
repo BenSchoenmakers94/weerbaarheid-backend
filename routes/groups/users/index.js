@@ -8,6 +8,7 @@ const create = require('./create');
 
 const VerifyToken = require('../../../helpers/verifyToken');
 const HasRole = require('../../../helpers/hasRole');
+const CheckIfJSON = require('../../../helpers/checkIfJson');
 const DeserializePayload = require('../../../helpers/deserializePayload');
 const AttributesInPayload = require('../../../helpers/attributesInPayload'); 
 
@@ -15,7 +16,7 @@ const MessagesWithUser = require('./messages');
 
 users.use('/:userId/messages', MessagesWithUser);
 
-users.all('*', [VerifyToken, HasRole]);
+users.all('*', [VerifyToken, HasRole, CheckIfJSON]);
 
 users.get('/', all);
 users.get('/:userId', single);

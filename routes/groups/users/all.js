@@ -12,7 +12,11 @@ module.exports = (req, res) => {
         .populate('messages')
         .exec(function(err, users) {
             var jsonapi = UserSerializer.serialize(users);
+            if (req.format === 'HTML') {
+                res.render('userSingle', { users: users});
+            } else {
             res.status(200).send(jsonapi);
+            }
         });
     })
   };

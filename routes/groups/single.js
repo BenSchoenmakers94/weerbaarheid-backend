@@ -11,7 +11,11 @@ module.exports = (req, res) => {
             return res.status(500).send("There was a problem with retrieving the users in the group.");
         }
         var jsonApi = GroupSerializer.serialize(group);
-        res.status(200).send(jsonApi);
+        if (req.format === 'HTML') {
+            res.render('groupSingle', { groups: [group]});
+        } else {
+        res.status(200).send(jsonapi);
+        }
     })
     
 }

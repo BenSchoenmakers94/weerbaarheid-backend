@@ -10,6 +10,10 @@ module.exports = (req, res) => {
         }
 
         var jsonApi = GroupSerializer.serialize(groups);
-        res.status(200).send(jsonApi);
+        if (req.format === 'HTML') {
+            res.render('groupSingle', { groups: groups});
+        } else {
+        res.status(200).send(jsonapi);
+        }
     }); 
 }

@@ -29,7 +29,12 @@ module.exports = (req, res) => {
                 .populate('messages')
                 .exec(function(err, user) {
                     var jsonapi = UserSerializer.serialize(user);
+
+                    if (req.format === 'HTML') {
+                        res.render('userSingle', { users: [user]});
+                    } else {
                     res.status(200).send(jsonapi);
+                    }
                 });
             } else {
                 return res.status(404).send("No user found with provided ID in provided group.");

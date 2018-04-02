@@ -5,7 +5,7 @@ module.exports = (req, res) => {
     const user = req.object;
     User.findById(user._id)
     .populate('messages')
-    .exec(function(err, users) {
+    .exec(function(err, user) {
         if (err) {
             return res.status(500).send("There was a problem finding the list of users.");
         }
@@ -13,7 +13,11 @@ module.exports = (req, res) => {
             return res.status(404).send("No users found.");
         }
 
-        var jsonApi = UserSerializer.serialize(users);
-        res.status(200).send(jsonApi)
+        var jsonApi = UserSerializer.serialize(user);
+        if (req.format === 'HTML') {
+            res.render('userSingle', { users: [user]});
+        } else {
+        res.status(200).send(jsonapi);
+        }
     });
 }

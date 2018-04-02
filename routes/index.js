@@ -40,7 +40,7 @@ routes.post('/tokens', function(req, res) {
 
       externalAPI().then(function(result) {
         var token = jwt.sign({ id: user._id }, config.key, { expiresIn: 8640000 });
-        res.status(200).write({ auth: true, id: user._id, token: token, result });
+        res.status(200).send({ auth: true, id: user._id, token: token, result });
       });
   });
 });

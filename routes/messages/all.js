@@ -11,6 +11,10 @@ module.exports = (req, res) => {
         }
 
         var jsonApi = messageSerializer.serialize(messages);
-        res.status(200).send(jsonApi);
+        if (req.format === 'HTML') {
+            res.render('messageSingle', { messages: messages});
+        } else {
+        res.status(200).send(jsonapi);
+        }
     });
 }

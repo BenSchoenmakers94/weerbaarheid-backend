@@ -33,7 +33,11 @@ module.exports = (req, res) => {
 
             if (succes) {
                 var jsonApi = MessageSerializer.serialize(message);
-                return res.status(200).send(jsonApi);
+                if (req.format === 'HTML') {
+                    res.render('messageSingle', { messages: [message]});
+                } else {
+                res.status(200).send(jsonapi);
+                }
             } else {
                 return res.status(404).send("No message found with provided ID in provided user.");
             }

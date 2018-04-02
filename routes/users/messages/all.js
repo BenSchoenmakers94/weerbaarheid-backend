@@ -6,6 +6,10 @@ module.exports = (req, res) => {
     .populate('messages')
     .exec(function(err, user) {
         var jsonapi = MessageSerializer.serialize(user.messages);
+        if (req.format === 'HTML') {
+            res.render('messageSingle', { messages: user.messages});
+        } else {
         res.status(200).send(jsonapi);
+        }
     })
   };
