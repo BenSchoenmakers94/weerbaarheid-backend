@@ -14,7 +14,7 @@ module.exports = (req, res) => {
             res.render('messageSingle', { messages: messages});
         } else {
             var jsonApi = ResourceSerializer.serialize('Message', messages, { meta: { pagination: req.options, filters: req.where } });
-            res.status(200).send(jsonapi);
+            res.status(200).send(jsonApi);
         }
     });
 }
