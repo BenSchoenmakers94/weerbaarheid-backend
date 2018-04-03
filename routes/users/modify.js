@@ -16,7 +16,7 @@ module.exports = (req, res) => {
                 );
             }
 
-            var jsonapi = ResourceSerializer.serialize('User', user);
-            return res.status(200).send(jsonapi);
+            var jsonApi = ResourceSerializer.serialize('User', user);
+            return res.status(200).send(jsonApi);
         })
 }

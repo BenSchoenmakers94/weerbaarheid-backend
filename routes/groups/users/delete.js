@@ -17,8 +17,8 @@ module.exports = (req, res) => {
            { new: true })
            .populate('users')
            .exec(function(err, group) {
-            var jsonapi = ResourceSerializer.serialize('Group', group);
-            return res.status(200).send(jsonapi);
+            var jsonApi = ResourceSerializer.serialize('Group', group);
+            return res.status(200).send(jsonApi);
             });  
     });
 }

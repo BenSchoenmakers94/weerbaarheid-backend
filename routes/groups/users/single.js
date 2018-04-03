@@ -28,12 +28,13 @@ module.exports = (req, res) => {
                 User.findById(user._id, req.fields)
                 .populate('messages')
                 .exec(function(err, user) {
-                     var jsonapi = ResourceSerializer.serialize('User', user);
+
 
                     if (req.format === 'HTML') {
                         res.render('userSingle', { users: [user]});
                     } else {
-                    res.status(200).send(jsonapi);
+                        var jsonApi = ResourceSerializer.serialize('User', user);
+                        res.status(200).send(jsonApi);
                     }
                 });
             } else {

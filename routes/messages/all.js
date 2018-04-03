@@ -10,11 +10,11 @@ module.exports = (req, res) => {
             return res.status(404).send("No messages found.");
         }
       
-        var jsonApi = ResourceSerializer.serialize('Message', messages, { meta: { pagination: req.options, filters: req.where } });
         if (req.format === 'HTML') {
             res.render('messageSingle', { messages: messages});
         } else {
-        res.status(200).send(jsonapi);
+            var jsonApi = ResourceSerializer.serialize('Message', messages, { meta: { pagination: req.options, filters: req.where } });
+            res.status(200).send(jsonapi);
         }
     });
 }

@@ -25,11 +25,12 @@ module.exports = (req, res) => {
             });
 
             if (succes) {
-                var jsonApi = ResourceSerializer.serialize('Message', message);
+
                 if (req.format === 'HTML') {
                     res.render('messageSingle', { messages: [message]});
                 } else {
-                res.status(200).send(jsonapi);
+                    var jsonApi = ResourceSerializer.serialize('Message', message);
+                    res.status(200).send(jsonApi);
                 }
             } else {
                 return res.status(404).send("No message found with provided ID in provided user.");

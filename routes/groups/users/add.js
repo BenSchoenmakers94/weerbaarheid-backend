@@ -16,8 +16,8 @@ module.exports = (req, res) => {
             Group.findById(req.object._id)
             .populate('users')
             .exec(function(err, popGroup) {
-            var jsonapi = ResourceSerializer.serialize('User', user);
-            return res.status(201).send(jsonapi);
+            var jsonApi = ResourceSerializer.serialize('User', user);
+            return res.status(201).send(jsonApi);
             });
         }, function(error){});
     });
