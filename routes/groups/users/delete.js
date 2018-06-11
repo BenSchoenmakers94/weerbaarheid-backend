@@ -3,6 +3,7 @@ var Group = require('../../../models/group');
 var ResourceSerializer = require('../../../serializers/resourceSerializer');
 
 module.exports = (req, res) => {
+  console.log('lol4')
     User.findById(new RegExp('^'+ req.params.userId + '$', "i"), function(err, user) {
         if (err) {
             return res.status(500).send("There is something wrong with the server.");
