@@ -6,10 +6,6 @@ module.exports = (req, res) => {
         if (err) {
             return res.status(500).send("There was a problem finding the list of message.");
         }
-        if (!messages) {
-            return res.status(404).send("No messages found.");
-        }
-      
         if (req.format === 'HTML') {
             res.render('messageSingle', { messages: messages});
         } else {

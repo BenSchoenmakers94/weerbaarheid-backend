@@ -13,7 +13,7 @@ var userSchema = new mongoose.Schema({
 });
 
 userSchema.path('birthDate').validate(function(value) {
-    return value && value < new Date();
+    return value && value <= new Date();
 }, "Birthdate must be set before the current date.");
 
 userSchema.path('postalCode').validate(function(value) {

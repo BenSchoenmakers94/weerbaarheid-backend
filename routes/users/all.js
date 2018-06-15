@@ -1,5 +1,6 @@
 var User = require('../../models/user');
 var ResourceSerializer = require('../../serializers/resourceSerializer');
+const debug = require('debug')('test')
 
 module.exports = (req, res) => {
     User.find(req.where, req.fields, req.options)
@@ -8,11 +9,6 @@ module.exports = (req, res) => {
         if (err) {
             return res.status(500).send("There was a problem finding the list of users.");
         }
-        if (!users) {
-            return res.status(404).send("No users found.");
-        }
-
-
         if (req.format === 'HTML') {
             res.render('userSingle', { users: users});
         } else {

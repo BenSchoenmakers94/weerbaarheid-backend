@@ -1,11 +1,7 @@
-process.env.NODE_ENV = 'test';
-
 let mongoose = require('mongoose');
 let User = require('../models/user');
 let Group = require('../models/group');
 let bcrypt = require('bcryptjs');
-
-const debug = require('debug')('test')
 
 let chai = require('chai');
 let chaiHttp = require('chai-http');
@@ -14,12 +10,12 @@ let should = chai.should();
 let jwt = require('jsonwebtoken');
 let config = require('../config/credentials');
 
+chai.use(chaiHttp);
 var auth;
 
 describe('Users', function () {
   this.timeout(50000)
   beforeEach((done) => {
-      chai.use(chaiHttp);
       User.create({_id: "admin", password: bcrypt.hashSync('admin', 8), birthDate: new Date(), firstName: 'admin', lastName: 'admin', postalCode: '1234am', email: 'admin', houseNumber: '1'}, (e, user) => {
         Group.create({_id: "Administrator", users: user._id}, (e, group) => {
           token = jwt.sign({ id: user._id }, config.key, {expiresIn: 8640000});
@@ -30,7 +26,8 @@ describe('Users', function () {
   });
 
   afterEach((done) => {
-    mongoose.connection.db.dropDatabase(done);
+    mongoose.connection.db.dropDatabase();
+    done()
   });
 
   describe('/GET users', () => {
@@ -53,47 +50,59 @@ describe('Users', function () {
       chai.request(server)
       .get('/groups/Administrator/users')
       .set("authorization", auth)
-      .end((err, res2) => {
-        res2.should.have.status(200);
-        res2.body.should.be.a('Object');
-        res2.body.data.should.be.a('Array');
-        res2.body.data.length.should.eql(1);
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('Object');
+        res.body.data.should.be.a('Array');
+        res.body.data.length.should.eql(1);
         done();
       });
     });
   });
 
-  // describe('/CREATE users/:id', () => {
-  //   let params = JSON.stringify({data: {attributes: {id: 'test', first_name: "test", last_name: "test", password: 'test', email: 'tester', postalCode: '1111aa', houseNumber: '1', birthDate: new Date()}}})
-  //
-  //   it('it should CREATE the user', (done) => {
-  //       chai.request(server)
-  //       .post('/users')
-  //       .set("authorization", auth)
-  //       .set("content-type", "application/vnd.api+json")
-  //       .send(params)
-  //       .end((err, res3) => {
-  //         res3.should.have.status(201)
-  //         res3.body.data.id.should.eql('test');
-  //         done();
-  //       });
-  //   }); 
-  // });
-  //
-  // describe('/CREATE groups/:id/users/:id', () => {
-  //   let params = JSON.stringify({data: {attributes: {id: 'test', first_name: "test", last_name: "test", password: 'test', email: 'tester', postalCode: '1111aa', houseNumber: '1', birthDate: new Date()}}})
-  //
-  //   it('it should CREATE the user', (done) => {
-  //       chai.request(server)
-  //       .post('/groups/Administrator/users')
-  //       .set("authorization", auth)
-  //       .set("content-type", "application/vnd.api+json")
-  //       .send(params)
-  //       .end((err, res4) => {
-  //         res4.should.have.status(201)
-  //         res4.body.data.id.should.eql('test');
-  //         done();
-  //       });
-  //   }); 
-  // });
+  describe('DELETE /users/:id', () => {
+    it('it should DELETE the message', (done) => {
+        chai.request(server)
+        .del('/users/admin')
+        .set('authorization', auth)
+        .end((err, res) => {
+          res.should.have.status(200)
+          done();
+        });
+    });
+  });
+
+  describe('/CREATE users/:id', () => {
+    let params = JSON.stringify({data: {attributes: {id: 'test', first_name: "test", last_name: "test", password: 'test', email: 'tester', postalCode: '1111aa', houseNumber: '1', birthDate: new Date()}}})
+
+    it('it should CREATE the user', (done) => {
+        chai.request(server)
+        .post('/users')
+        .set("authorization", auth)
+        .set("content-type", "application/vnd.api+json")
+        .send(params)
+        .end((err, res) => {
+          res.should.have.status(201)
+          res.body.data.id.should.eql('test');
+          done();
+        });
+    }); 
+  });
+
+  describe('/CREATE groups/:id/users/:id', () => {
+    let params = JSON.stringify({data: {attributes: {id: 'test', first_name: "test", last_name: "test", password: 'test', email: 'tester', postalCode: '1111aa', houseNumber: '1', birthDate: new Date()}}})
+
+    it('it should CREATE the user', (done) => {
+        chai.request(server)
+        .post('/groups/Administrator/users')
+        .set("authorization", auth)
+        .set("content-type", "application/vnd.api+json")
+        .send(params)
+        .end((err, res) => {
+          res.should.have.status(201)
+          res.body.data.id.should.eql('test');
+          done();
+        });
+    }); 
+  });
 });
