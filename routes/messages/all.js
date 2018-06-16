@@ -1,4 +1,5 @@
 var Message = require('../../models/message');
+var externalAPI = require('../../helpers/externalAPI');
 var ResourceSerializer = require('../../serializers/resourceSerializer');
 
 module.exports = (req, res) => {
@@ -9,8 +10,11 @@ module.exports = (req, res) => {
         if (req.format === 'HTML') {
             res.render('messageSingle', { messages: messages});
         } else {
-            var jsonApi = ResourceSerializer.serialize('Message', messages, { meta: { pagination: req.options, filters: req.where } });
-            res.status(200).send(jsonApi);
+            externalAPI().then((quote) => {
+              messages.unshift(quote)
+              var jsonApi = ResourceSerializer.serialize('Message', messages, { meta: { pagination: req.options, filters: req.where } });
+              res.status(200).send(jsonApi);
+            });
         }
     });
 }
