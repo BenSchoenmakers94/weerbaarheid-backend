@@ -20,5 +20,5 @@ module.exports = (req, res) => {
             var jsonApi = ResourceSerializer.serialize('Group', group);
             res.status(200).send(jsonApi);
         }
-    });   
+    });
 }

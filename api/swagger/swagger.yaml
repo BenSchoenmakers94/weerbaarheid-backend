@@ -1,0 +1,54 @@
+swagger: "2.0"
+
+info:
+  version: 1.0.0
+  title: Weerbaarheid API
+  description: Een api voor berichten van gebruikers
+
+schemes:
+  - https
+host: powerful-reaches-33407.herokuapp.com
+basePath: /
+
+paths:
+  /users:
+    get:
+      summary: gets users
+      responses:
+        200:
+          description: A list of users
+          type: array
+          items:
+            $ref: "#/definitions/schemas/User"
+            
+                
+definitions:
+  User:
+      type: object
+      items:
+        properties:
+          id:
+            type: string
+          first-name:
+            type: string
+          last-name:
+            type: string
+          password:
+            type: string
+          email:
+            type: string
+          birth-date:
+            type: string
+          house-number:
+            type: string
+          postal-code:
+            type: string
+        required:
+          - id
+          - first-name
+          - last-name
+          - password
+          - email
+          - birth-date
+          - house-number
+          - postal-code

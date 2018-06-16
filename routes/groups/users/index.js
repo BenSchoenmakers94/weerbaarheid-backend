@@ -16,7 +16,7 @@ const MessagesWithUser = require('./messages');
 
 users.use('/:userId/messages', MessagesWithUser);
 
-users.all('*', [VerifyToken, HasRole, CheckIfJSON]);
+users.all('*', [VerifyToken/* , HasRole */, CheckIfJSON]);
 
 users.get('/', all);
 users.get('/:userId', single);

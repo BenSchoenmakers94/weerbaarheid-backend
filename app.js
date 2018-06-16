@@ -15,7 +15,6 @@ require('./config/credentials');
 require('./config/database');
 // /Init
 
-
 //Routes
 const routes = require('./routes');
 app.use('/', routes);

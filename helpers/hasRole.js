@@ -5,11 +5,11 @@ function hasRole (req, res, next) {
         if (err) {
             return res.status(404).send("No group was assigned to the specified user." + err);
         }
-        if (!(group._id === 'Administrator')) {
+        if (!group || !(group._id === 'Administrator')) {
             return res.status(403).send("Only users in the Administrator group have access.");
         }
+        next();
     });
-    next();
 }
 
 module.exports = hasRole;
