@@ -14,6 +14,7 @@ let server = require('../server');
 let should = chai.should();
 let jwt = require('jsonwebtoken');
 let config = require('../config/credentials');
+let addMessageToUser = require('../helpers/addMessageToUser');
 
 var auth;
 var admin;
@@ -56,6 +57,31 @@ describe('Messages', function () {
     });
   });
 
+  describe('GET /messages/:id', () => {
+    it('it should GET a message', (done) => {
+      Message.create({_id: 'test', subject: 'test', content: 'test', urgent: false}, (e, message) => {
+        chai.request(server)
+        .get('/messages/test')
+        .set('authorization', auth)
+        .end((err, res) => {
+          res.should.have.status(200)
+          res.body.data.id.should.eql('test')
+          done();
+        });
+      });
+    });
+
+    it('it should return 404 when not found', (done) => {
+      chai.request(server)
+      .get('/messages/nonExistent')
+      .set('authorization', auth)
+      .end((err, res) => {
+        res.should.have.status(404)
+        done();
+      });
+    });
+  });
+
   describe('GET /users/:id/messages', () => {
     it('it should GET all the messages', (done) => {
       Message.create({_id: 'test', subject: 'test', content: 'test', urgent: false}, (e, message) => {
@@ -67,6 +93,21 @@ describe('Messages', function () {
           res.body.should.be.a('Object')
           res.body.data.should.be.a('Array');
           res.body.data.length.should.eql(0);
+          done();
+        });
+      });
+    });
+  });
+
+  describe('GET /users/:id/messages/:id', () => {
+    Message.create({_id: 'test', subject: 'test', content: 'test', urgent: false}, (e, message) => {
+      addMessageToUser(null, 'test', 'admin').then((res) => {
+        chai.request(server)
+        .get('/users/admin/messages/test')
+        .set("authorization", auth)
+        .end((err, res) => {
+          res.should.have.status(200)
+          res.body.data.id.should.eql('test');
           done();
         });
       });
@@ -88,7 +129,35 @@ describe('Messages', function () {
         });
       });
     });
+  });
 
+  describe('GET /groups/:id/users/:id/messages/:id', () => {
+    it('it GETS a single message from the given user', (done) => {
+      Message.create({_id: 'test', subject: 'test', content: 'test', urgent: false}, (e, message) => {
+        addMessageToUser(null, 'test', 'admin').then((res) => {
+          chai.request(server)
+          .get('/groups/Administrator/users/admin/messages/test')
+          .set("authorization", auth)
+          .end((err, res) => {
+            res.should.have.status(200)
+            res.body.data.id.should.eql('test');
+            done();
+          });
+        });
+      });
+
+      it('it returns 404 if the user does not have the message', (done) => {
+        Message.create({_id: 'test', subject: 'test', content: 'test', urgent: false}, (e, message) => {
+          chai.request(server)
+          .get('/groups/Administrator/users/admin/messages/test')
+          .set("authorization", auth)
+          .end((err, res) => {
+            res.should.have.status(404)
+            done();
+          });
+        });
+      });
+    });
   });
 
 
@@ -102,12 +171,12 @@ describe('Messages', function () {
       .set('content-type', 'application/vnd.api+json')
       .send(params)
       .end((err, res) => {
-        if(err) { console.log(err) }
         res.should.have.status(201);
         res.body.data.id.should.eql('message1');
         done();
       });
     });
   });
+
 });
 

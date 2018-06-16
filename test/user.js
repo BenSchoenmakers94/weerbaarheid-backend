@@ -45,6 +45,30 @@ describe('Users', function () {
     });
   });
 
+  describe('GET users/:id', () => {
+    it('it GETS a single user', (done) => {
+      chai.request(server)
+      .get('/users/admin')
+      .set("authorization", auth)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.data.id.should.eql('admin');
+        done()
+      });
+    });
+
+
+    it('it returns 404 when not found', (done) => {
+      chai.request(server)
+      .get('/users/nonExistent')
+      .set("authorization", auth)
+      .end((err, res) => {
+        res.should.have.status(404);
+        done()
+      });
+    });
+  });
+
   describe('/GET groups/:id/users', () => {
     it('it should GET all the users from the group', (done) => {
       chai.request(server)
@@ -56,6 +80,30 @@ describe('Users', function () {
         res.body.data.should.be.a('Array');
         res.body.data.length.should.eql(1);
         done();
+      });
+    });
+  });
+
+  describe('GET groups/:id/users/:id', () => {
+    it('it GETS a single user', (done) => {
+      chai.request(server)
+      .get('/groups/Administrator/users/admin')
+      .set("authorization", auth)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.data.id.should.eql('admin');
+        done()
+      });
+    });
+
+
+    it('it returns 404 when not found', (done) => {
+      chai.request(server)
+      .get('/groups/Administrator/users/nonExistent')
+      .set("authorization", auth)
+      .end((err, res) => {
+        res.should.have.status(404);
+        done()
       });
     });
   });
@@ -86,7 +134,21 @@ describe('Users', function () {
           res.body.data.id.should.eql('test');
           done();
         });
-    }); 
+    });
+
+    let invalidParams = JSON.stringify({data: {attributes: {id: 'test'}}});
+    it('it should return errors', (done) => {
+      chai.request(server)
+      .post('/users')
+      .set("authorization", auth)
+      .set("content-type", "application/vnd.api+json")
+      .send(invalidParams)
+      .end((err, res) => {
+        res.should.have.status(422);
+        res.text.should.contain('User validation failed');
+        done();
+      });
+    });
   });
 
   describe('/CREATE groups/:id/users/:id', () => {
@@ -104,5 +166,19 @@ describe('Users', function () {
           done();
         });
     }); 
+
+    let invalidParams = JSON.stringify({data: {attributes: {id: 'test'}}});
+    it('it should return errors', (done) => {
+      chai.request(server)
+      .post('/users')
+      .set("authorization", auth)
+      .set("content-type", "application/vnd.api+json")
+      .send(invalidParams)
+      .end((err, res) => {
+        res.should.have.status(422);
+        res.text.should.contain('User validation failed');
+        done();
+      });
+    });
   });
 });

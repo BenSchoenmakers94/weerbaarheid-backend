@@ -10,7 +10,9 @@ module.exports = (req, res) => {
         if (err) {
             return res.status(500).send("There was a problem with retrieving the users in the group.");
         }
-      
+        if (!group) {
+          return res.status(404).send('Group not found');
+        }
 
         if (req.format === 'HTML') {
             res.render('groupSingle', { groups: [group]});

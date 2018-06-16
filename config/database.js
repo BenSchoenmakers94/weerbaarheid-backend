@@ -5,7 +5,5 @@ mongoose.connect('mongodb://localhost:27017/weerbaarheid',
     { keepAlive: 120 } , function(err) {
     if (err) {
         console.log(err);
-    } else {
-        console.log('Connection Successful!');
     }
 });

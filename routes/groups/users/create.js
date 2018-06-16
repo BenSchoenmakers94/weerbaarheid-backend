@@ -5,6 +5,9 @@ var addUserToGroup = require('../../../helpers/addUserToGroup');
 var ResourceSerializer = require('../../../serializers/resourceSerializer');
 
 module.exports = (req, res) => {
+    if(req.payload.password == undefined) {
+      return res.status(422).send('User validation failed, password is missing')
+    }
     var hashedPassword = bcrypt.hashSync(req.payload.password, 8);
     req.attributes['_id'] = req.payload.id;
     req.attributes['password'] = hashedPassword;

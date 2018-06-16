@@ -45,18 +45,55 @@ describe('Groups', function () {
     });
   });
 
-  describe('/CREATE groups', () => {
+  describe('GET /groups/:id', () => {
+    it('it should GET a single group', (done) => {
+      chai.request(server)
+      .get('/groups/Administrator')
+      .set('authorization', auth)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.data.id.should.eql('Administrator');
+        done();
+      });
+    });
+
+    it('it should return 404 when not found', (done) => {
+      chai.request(server)
+      .get('/groups/nonExistent')
+      .set('authorization', auth)
+      .end((err, res) => {
+        res.should.have.status(404);
+        done();
+      });
+    });
+  });
+
+  describe('CREATE /groups', () => {
     let params = JSON.stringify({data: {attributes: { id: 'test_group' }}})
-    it('it should CREATE a group', () => {
+    it('it should CREATE a group', (done) => {
       chai.request(server)
       .post('/groups')
       .set('authorization', auth)
       .set('content-type', "application/vnd.api+json")
       .send(params)
       .end((err, res) => {
-        console.log(err)
         res.should.have.status(201)
         res.body.data.id.should.eql('test_group')
+        done();
+      });
+    });
+
+    let invalidParams = JSON.stringify({data: {attributes: { id: null }}})
+
+    it('it should return errors', (done) => {
+      chai.request(server)
+      .post('/groups')
+      .set('authorization', auth)
+      .set('content-type', "application/vnd.api+json")
+      .send(invalidParams)
+      .end((err, res) => {
+        res.should.have.status(422)
+        res.text.should.contain('Group validation failed');
         done();
       });
     });
