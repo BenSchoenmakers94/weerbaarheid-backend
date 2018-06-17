@@ -12,9 +12,9 @@ var externalAPI = require('../helpers/externalAPI');
 routes.use(bodyParser.urlencoded({ extended: false }));
 routes.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
-const users = require('./users');
-const groups = require('./groups');
-const messages = require('./messages');
+const users = require('./user.route');
+const groups = require('./group.route');
+const messages = require('./message.route');
 
 routes.get('/', checkIfJson, (req, res) => {
     if (req.format === 'HTML') {
@@ -42,6 +42,8 @@ routes.post('/tokens', function(req, res) {
       res.status(200).send({ auth: true, id: user._id, token: token });
   });
 });
+
+// routes.all('*', (req, res, next) => { console.log(req.originalUrl); next();});
 
 routes.use('/users', users);
 routes.use('/groups', groups);

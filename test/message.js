@@ -39,6 +39,23 @@ describe('Messages', function () {
     mongoose.connection.db.dropDatabase(done);
   });
 
+  describe('GET /users/:id/messages/:id', () => {
+    it('it should Get all the users messages', (done) => {
+      Message.create({_id: 'test', subject: 'test', content: 'test', urgent: false}, (e, message) => {
+        addMessageToUser('test', 'admin').then(() => {
+          chai.request(server)
+          .get('/users/admin/messages/test')
+          .set("authorization", auth)
+          .end((err, res) => {
+            res.should.have.status(200)
+            res.body.data.id.should.eql('test');
+            done();
+          });
+        }).catch((err) => { console.log(err)});
+      });
+    });
+  });
+
   describe('GET /messages', () => {
     it('it should GET all the messages', (done) => {
       Message.create({_id: 'test', subject: 'test', content: 'test', urgent: false}, (e, message) => {
@@ -99,20 +116,6 @@ describe('Messages', function () {
     });
   });
 
-  describe('GET /users/:id/messages/:id', () => {
-    Message.create({_id: 'test', subject: 'test', content: 'test', urgent: false}, (e, message) => {
-      addMessageToUser(null, 'test', 'admin').then((res) => {
-        chai.request(server)
-        .get('/users/admin/messages/test')
-        .set("authorization", auth)
-        .end((err, res) => {
-          res.should.have.status(200)
-          res.body.data.id.should.eql('test');
-          done();
-        });
-      });
-    });
-  });
 
   describe('GET /groups/:id/users/:id/messages', () => {
     it('it should GET all the messages', (done) => {
@@ -155,6 +158,25 @@ describe('Messages', function () {
             res.should.have.status(404)
             done();
           });
+        });
+      });
+    });
+  });
+
+  describe('PATCH /messages/:id', () => {
+    let params = JSON.stringify({data: {attributes: {subject: 'test_change'}}});
+
+    it('it should PATCH the message', (done) => {
+      Message.create({_id: 'test', subject: 'test', content: 'test', urgent: false}, (e, message) => {
+        chai.request(server)
+        .patch('/messages/test')
+        .set('authorization', auth)
+        .set('content-type', 'application/vnd.api+json')
+        .send(params)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.data.attributes.subject.should.eql('test_change');
+          done();
         });
       });
     });

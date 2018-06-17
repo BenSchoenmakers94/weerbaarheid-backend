@@ -1,15 +1,14 @@
 var Message = require('../models/message');
 var User = require('../models/user');
 
-
-function addMessageToUser(res, messageId, userId) {
-    var promise = new Promise(function(resolve, reject) {
+function addMessageToUser(messageId, userId) {
+    return new Promise((resolve) => {
         User.findById(userId, function(err, user) {
             if (err) {
-                reject(res.stats(422).send("There was a problem with modifying the user."));
+                resolve({success: false, code: 500, content: err.message});
             }
             if (!user) {
-                reject(res.status(404).send("The proposed user does not exist"));
+                resolve({success: false, code: 404, content: 'user not found'});
             }
         })
         User.findByIdAndUpdate(
@@ -18,12 +17,11 @@ function addMessageToUser(res, messageId, userId) {
             { new: true, runValidators: true },
             function(err, user) {
                 if (err) {
-                    reject(res.stats(422).send("There was a problem with modifying the user."));
+                    resolve({success: false, code: 422, content: err.message});
                 }
                 resolve(user);
         });
     });
-    return promise;
 }
 
 module.exports = addMessageToUser;

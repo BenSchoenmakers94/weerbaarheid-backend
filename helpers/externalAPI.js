@@ -16,4 +16,4 @@ function getExternalData() {
     });
 }
 
-module.exports = getExternalData;
+module.exports = getExternalData

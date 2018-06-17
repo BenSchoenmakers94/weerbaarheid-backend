@@ -114,9 +114,27 @@ describe('Users', function () {
         .del('/users/admin')
         .set('authorization', auth)
         .end((err, res) => {
-          res.should.have.status(200)
+          res.should.have.status(204)
           done();
         });
+    });
+  });
+
+  describe('/PATCH users/:id', () => {
+    let params = JSON.stringify({data: {attributes: {first_name: 'test_change'}}})
+
+    it('it should PATCH the user', (done) => {
+      chai.request(server)
+      .patch('/users/admin')
+      .set("authorization", auth)
+      .set("content-type", "application/vnd.api+json")
+      .send(params)
+      .end((err, res) => {
+        console.log(err)
+        res.should.have.status(200)
+        res.body.data.attributes['first-name'].should.eql('test_change');
+        done();
+      });
     });
   });
 

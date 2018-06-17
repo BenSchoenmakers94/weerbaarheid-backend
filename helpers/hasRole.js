@@ -1,7 +1,7 @@
 var Group = require('../models/group');
 
 function hasRole (req, res, next) {
-    Group.findOne({ 'users': { _id: req.userId }}, function(err, group) {
+    Group.findOne({ 'users': { _id: req.currentUserId }}, function(err, group) {
         if (err) {
             return res.status(404).send("No group was assigned to the specified user." + err);
         }
