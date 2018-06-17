@@ -3,18 +3,10 @@ const ResourceSerializer = require('../serializers/resourceSerializer');
 const router = require('express').Router();
 const userRoutes = require('./user.route');
 
-const VerifyToken = require('../helpers/verifyToken');
-const IsAuthorized = require('../helpers/isAuthorized');
-const HasRole = require('../helpers/hasRole');
-const CheckIfJSON = require('../helpers/checkIfJson');
 const DeserializePayload = require('../helpers/deserializePayload');
 
-router.all('*', CheckIfJSON);
-
-
-
 router.route('/')
-    .get([VerifyToken, HasRole], async (req, res) => {
+    .get(async (req, res) => {
       let result = await GroupController.many(req.where, req.fields, req.options)
       if(result.success) {
         if(req.format === 'HTML') {
@@ -25,7 +17,7 @@ router.route('/')
       }
       return res.status(result.code).send(result.content)
     })
-    .post([VerifyToken, HasRole, DeserializePayload], async (req, res) => {
+    .post([DeserializePayload], async (req, res) => {
       let result = await GroupController.createSingle(req.payload);
       if(result.success) {
         let group = ResourceSerializer.serialize('Group', result.content);
@@ -34,9 +26,16 @@ router.route('/')
       return res.status(result.code).send(result.content);
     });
 
-router.use('/:groupId/users', userRoutes)
+router.use('/:groupId/users',
+  (req, res, next) => { 
+    req.groupId = req.params.groupId;
+    next();
+  },
+  userRoutes
+);
+
 router.route('/:groupId')
-    .get([VerifyToken, HasRole], async (req, res) => {
+    .get(async (req, res) => {
         let result = await GroupController.single(req.params.groupId, req.fields);
         if(result.success) {
           if(req.format === 'HTML') {
@@ -47,7 +46,7 @@ router.route('/:groupId')
         }
         return res.status(result.code).send(result.content)
     })
-    .delete([VerifyToken, HasRole], async (req, res) => {
+    .delete(async (req, res) => {
       let result = await GroupController.deleteSingle(req.params.id);
       return res.status(result.code).json(result.content);
     });

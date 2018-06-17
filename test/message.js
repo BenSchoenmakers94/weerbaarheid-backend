@@ -40,13 +40,15 @@ describe('Messages', function () {
   });
 
   describe('GET /users/:id/messages/:id', () => {
-    it('it should Get all the users messages', (done) => {
+    it('it should Get the users message', (done) => {
       Message.create({_id: 'test', subject: 'test', content: 'test', urgent: false}, (e, message) => {
-        addMessageToUser('test', 'admin').then(() => {
+        if(e) console.log(e);
+        addMessageToUser('test', 'admin').then((result) => {
           chai.request(server)
           .get('/users/admin/messages/test')
           .set("authorization", auth)
           .end((err, res) => {
+            console.log(err)
             res.should.have.status(200)
             res.body.data.id.should.eql('test');
             done();
@@ -59,6 +61,8 @@ describe('Messages', function () {
   describe('GET /messages', () => {
     it('it should GET all the messages', (done) => {
       Message.create({_id: 'test', subject: 'test', content: 'test', urgent: false}, (e, message) => {
+
+        if(e) console.log(e);
         chai.request(server)
         .get('/messages')
         .set("authorization", auth)
@@ -77,6 +81,8 @@ describe('Messages', function () {
   describe('GET /messages/:id', () => {
     it('it should GET a message', (done) => {
       Message.create({_id: 'test', subject: 'test', content: 'test', urgent: false}, (e, message) => {
+
+        if(e) console.log(e);
         chai.request(server)
         .get('/messages/test')
         .set('authorization', auth)
@@ -102,6 +108,8 @@ describe('Messages', function () {
   describe('GET /users/:id/messages', () => {
     it('it should GET all the messages', (done) => {
       Message.create({_id: 'test', subject: 'test', content: 'test', urgent: false}, (e, message) => {
+
+        if(e) console.log(e);
         chai.request(server)
         .get('/users/admin/messages')
         .set("authorization", auth)
@@ -120,6 +128,7 @@ describe('Messages', function () {
   describe('GET /groups/:id/users/:id/messages', () => {
     it('it should GET all the messages', (done) => {
       Message.create({_id: 'test', subject: 'test', content: 'test', urgent: false}, (e, message) => {
+        if(e) console.log(e);
         chai.request(server)
         .get('/groups/Administrator/users/admin/messages')
         .set("authorization", auth)
@@ -137,7 +146,9 @@ describe('Messages', function () {
   describe('GET /groups/:id/users/:id/messages/:id', () => {
     it('it GETS a single message from the given user', (done) => {
       Message.create({_id: 'test', subject: 'test', content: 'test', urgent: false}, (e, message) => {
-        addMessageToUser(null, 'test', 'admin').then((res) => {
+        addMessageToUser('test', 'admin').then((res) => {
+
+        if(e) console.log(e);
           chai.request(server)
           .get('/groups/Administrator/users/admin/messages/test')
           .set("authorization", auth)
@@ -151,6 +162,7 @@ describe('Messages', function () {
 
       it('it returns 404 if the user does not have the message', (done) => {
         Message.create({_id: 'test', subject: 'test', content: 'test', urgent: false}, (e, message) => {
+        if(e) console.log(e);
           chai.request(server)
           .get('/groups/Administrator/users/admin/messages/test')
           .set("authorization", auth)

@@ -6,10 +6,7 @@ const messageRoutes = require('./message.route');
 const VerifyToken = require('../helpers/verifyToken');
 const IsAuthorized = require('../helpers/isAuthorized');
 const HasRole = require('../helpers/hasRole');
-const CheckIfJSON = require('../helpers/checkIfJson');
 const DeserializePayload = require('../helpers/deserializePayload');
-
-router.all('*', CheckIfJSON);
 
 router.route('/')
     .get([VerifyToken, HasRole], async (req, res) => {
@@ -33,10 +30,12 @@ router.route('/')
     });
 
 router.use('/:userId/messages',
-  (req, res, next) => { 
+  [(req, res, next) => { 
     req.userId = req.params.userId;
     next();
   },
+    VerifyToken
+  ],
   messageRoutes
 );
 

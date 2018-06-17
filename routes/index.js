@@ -1,13 +1,14 @@
 const routes = require('express').Router();
-var bodyParser= require('body-parser');
-var jwt = require('jsonwebtoken');
-var bcrypt = require('bcryptjs');
-
-
-var config = require('../config/credentials');
-var User = require('..//models/user');
-var checkIfJson = require('../helpers/checkIfJson');
-var externalAPI = require('../helpers/externalAPI');
+const bodyParser= require('body-parser');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const config = require('../config/credentials');
+const User = require('..//models/user');
+const checkIfJson = require('../helpers/checkIfJson');
+const externalAPI = require('../helpers/externalAPI');
+const VerifyToken = require('../helpers/verifyToken');
+const HasRole = require('../helpers/hasRole');
+const CheckIfJSON = require('../helpers/checkIfJson.js');
 
 routes.use(bodyParser.urlencoded({ extended: false }));
 routes.use(bodyParser.json({ type: 'application/vnd.api+json' }));
@@ -43,10 +44,10 @@ routes.post('/tokens', function(req, res) {
   });
 });
 
-// routes.all('*', (req, res, next) => { console.log(req.originalUrl); next();});
+routes.all('*', CheckIfJSON);
 
 routes.use('/users', users);
-routes.use('/groups', groups);
-routes.use('/messages', messages);
+routes.use('/groups', [VerifyToken, HasRole] , groups);
+routes.use('/messages', [VerifyToken], messages);
 
 module.exports = routes;
