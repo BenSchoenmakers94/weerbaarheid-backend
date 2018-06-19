@@ -52,7 +52,7 @@ router.route('/:userId')
         return res.status(result.code).send(result.content)
     })
     .patch([VerifyToken, IsAuthorized, DeserializePayload], async (req, res) => {
-        let result = await UserController.updateSingle(req.params.userId, req.payload);
+        let result = await UserController.updateSingle(req.params.userId, req.payload, req.groupId);
         if(result.success) {
           let user = ResourceSerializer.serialize('User', result.content);
           return res.status(result.code).send(user);

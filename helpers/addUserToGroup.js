@@ -4,8 +4,11 @@ var User = require('../models/user');
 function addUserToGroup(res, userId, groupId) {
     var promise = new Promise(function(resolve, reject) {
         User.findById(userId, function(err, user) {
+            if(err) {
+                resolve({success: false, code: 500, content: 'error occured'});
+            }
             if (!user) {
-                reject(res.status(404).send("The proposed user does not exist"));
+                resolve({success: false, code: 404, content: 'user not found'});
             }
         });
         Group.update(
@@ -16,11 +19,11 @@ function addUserToGroup(res, userId, groupId) {
             { multi: true },
             function(err, groups) {
                if (err) {
-                reject(res.status(500).send("There is a problem with the server."));
+                 resolve({success: false, code: 500, content: 'error occured'});
                }
             }
         );
-    
+
         Group.findByIdAndUpdate({ _id: groupId },
              {$addToSet: {
                 users: userId
@@ -28,9 +31,9 @@ function addUserToGroup(res, userId, groupId) {
              { new: true, runValidator: true },
              function(err, group) {
             if (err) {
-                reject(res.status(500).send("There is a problem with the server."));
+                 resolve({success: false, code: 500, content: 'error occured'});
             }
-            resolve(group);
+            resolve({success: true, code: 200, content: group});
         });
     });
     return promise;

@@ -27,7 +27,7 @@ module.exports = {
       });
     });
   },
-  updateSingle: (id, attributes) => {
+  updateSingle: (id, attributes, groupId) => {
     return new Promise((resolve) => {
       User.findByIdAndUpdate(
         id,
@@ -36,7 +36,11 @@ module.exports = {
         (err, user) => {
           if(err)   return resolve({success: false, code: 422, content: err})
           if(!user) return resolve({success: false, code: 404, content: "no user found"})
-          console.log(user.firstName)
+          if(groupId != undefined) {
+            addUserToGroup(user._id, groupId).then((result) => {
+              if(!result.success) return resolve(result);
+            });
+          }
           return resolve({success: true, code: 200, content: user});
         });
     });

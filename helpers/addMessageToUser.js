@@ -19,7 +19,7 @@ function addMessageToUser(messageId, userId) {
                 if (err) {
                     resolve({success: false, code: 422, content: err.message});
                 }
-                resolve(user);
+                resolve({success: true, code: 200, content: user});
         });
     });
 }
