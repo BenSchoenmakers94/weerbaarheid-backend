@@ -4,7 +4,7 @@ module.exports = {
   single: (id, fields) => {
     return new Promise((resolve) => {
       Group.findById(id, fields)
-      .populate('messages')
+      .populate('users')
       .exec((err, group) => {
         if(err)   return resolve({success: false, code: 500, content: "error occured"})
         if(!group) return resolve({success: false, code: 404, content: "no group found"})
