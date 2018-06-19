@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Group = require('../models/group');
 const bcrypt = require('bcryptjs');
 const addUserToGroup = require('../helpers/addUserToGroup');
 
@@ -65,5 +66,16 @@ module.exports = {
       });
     });
   },
+
+  manyForGroup: (filter, fields, options, groupId) => {
+    return new Promise((resolve) => {
+      Group.findById(groupId).populate({
+        path: 'users',
+        match: filter
+      }).exec((err, group) => {
+        return resolve({success: true, code: 200, content: group.users});
+      });
+    });
+  }
 
 }

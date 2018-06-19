@@ -9,7 +9,13 @@ const DeserializePayload = require('../helpers/deserializePayload');
 
 router.route('/')
     .get([VerifyToken, HasRole], async (req, res) => {
-      let result = await UserController.many(req.where, req.fields, req.options)
+      let result = {}
+      if(req.groupId != undefined) {
+        result = await UserController.manyForGroup(req.where, req.fields, req.options, req.groupId)
+      } else {
+        result = await UserController.many(req.where, req.fields, req.options)
+      }
+
       if(result.success) {
         if(req.format === 'HTML') {
           return res.render('userSingle', {users: users});

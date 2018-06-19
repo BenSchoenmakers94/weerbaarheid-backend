@@ -138,6 +138,24 @@ describe('Users', function () {
     });
   });
 
+  describe('/PATCH groups/:id/users/:id', () => {
+    let params = JSON.stringify({data: {attributes: {first_name: 'test_change'}}})
+
+    it('it should PATCH the user', (done) => {
+      chai.request(server)
+      .patch('/groups/Administrator/users/new')
+      .set("authorization", auth)
+      .set("content-type", "application/vnd.api+json")
+      .send(params)
+      .end((err, res) => {
+        console.log(err)
+        res.should.have.status(200)
+        res.body.data.attributes['first-name'].should.eql('test_change');
+        done();
+      });
+    });
+  });
+
   describe('/CREATE users/:id', () => {
     let params = JSON.stringify({data: {attributes: {id: 'test', first_name: "test", last_name: "test", password: 'test', email: 'tester', postalCode: '1111aa', houseNumber: '1', birthDate: new Date()}}})
 
