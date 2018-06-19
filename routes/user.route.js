@@ -4,7 +4,6 @@ const router = require('express').Router();
 const messageRoutes = require('./message.route');
 
 const VerifyToken = require('../helpers/verifyToken');
-const IsAuthorized = require('../helpers/isAuthorized');
 const HasRole = require('../helpers/hasRole');
 const DeserializePayload = require('../helpers/deserializePayload');
 
@@ -51,7 +50,7 @@ router.route('/:userId')
         }
         return res.status(result.code).send(result.content)
     })
-    .patch([VerifyToken, IsAuthorized, DeserializePayload], async (req, res) => {
+    .patch([VerifyToken, DeserializePayload], async (req, res) => {
         let result = await UserController.updateSingle(req.params.userId, req.payload, req.groupId);
         if(result.success) {
           let user = ResourceSerializer.serialize('User', result.content);
