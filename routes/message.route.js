@@ -54,7 +54,7 @@ router.route('/:messageId')
         return res.status(result.code).send(result.content);
     })
     .delete([HasRole], async (req, res) => {
-      let result = await MessageController.deleteSingle(req.params.id);
+      let result = await MessageController.deleteSingle(req.params.userId);
       return res.status(result.code).json(result.content);
     });
 

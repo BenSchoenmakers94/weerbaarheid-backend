@@ -46,8 +46,16 @@ router.route('/:groupId')
         }
         return res.status(result.code).send(result.content)
     })
+    .patch([DeserializePayload], async(req, res) => {
+      let result = await GroupController.updateSingle(req.params.groupId, req.payload);
+      if(result.success) {
+        let group = ResourceSerializer.serialize('Group', result.content);
+        return res.status(result.code).send(group);
+      }
+      return res.status(result.code).send(result.content);
+    })
     .delete(async (req, res) => {
-      let result = await GroupController.deleteSingle(req.params.id);
+      let result = await GroupController.deleteSingle(req.params.groupId);
       return res.status(result.code).json(result.content);
     });
 

@@ -83,6 +83,23 @@ describe('Groups', function () {
       });
     });
 
+    describe('/PATCH groups/:id', () => {
+      let params = JSON.stringify({data: {attributes: {id: 'test'}}})
+
+      it('it should PATCH the group', (done) => {
+        chai.request(server)
+        .patch('/groups/Administrator')
+        .set("authorization", auth)
+        .set("content-type", "application/vnd.api+json")
+        .send(params)
+        .end((err, res) => {
+          console.log(err)
+          res.should.have.status(200)
+          done();
+        });
+      });
+    });
+
     let invalidParams = JSON.stringify({data: {attributes: { id: null }}})
 
     it('it should return errors', (done) => {

@@ -59,7 +59,7 @@ router.route('/:userId')
         return res.status(result.code).send(result.content);
     })
     .delete([VerifyToken, HasRole], async (req, res) => {
-      let result = await UserController.deleteSingle(req.params.id);
+      let result = await UserController.deleteSingle(req.params.userId);
       return res.status(result.code).json(result.content);
     });
 
