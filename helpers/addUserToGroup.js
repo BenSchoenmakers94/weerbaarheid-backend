@@ -1,7 +1,7 @@
 var Group = require('../models/group');
 var User = require('../models/user');
 
-function addUserToGroup(res, userId, groupId) {
+function addUserToGroup(userId, groupId) {
     return new Promise(function(resolve, reject) {
         User.findById(userId, function(err, user) {
             if(err) {
@@ -21,11 +21,11 @@ function addUserToGroup(res, userId, groupId) {
                if (err) {
                  return resolve({success: false, code: 500, content: 'error occured'});
                }
-
               Group.findByIdAndUpdate({ _id: groupId },
                    {$addToSet: { users: userId }},
                    { new: true, runValidator: true },
                    function(err, group) {
+
                   if (err) {
                        return resolve({success: false, code: 500, content: 'error occured'});
                   }

@@ -34,7 +34,6 @@ router.route('/')
 
 router.route('/:messageId')
     .get([HasRole], async (req, res) => {
-        console.log(req.params)
         let result = await MessageController.single(req.params.messageId, req.fields);
         if(result.success) {
           if(req.format === 'HTML') {
